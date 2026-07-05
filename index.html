@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Andy Weir — Hard Science Fiction Author | The Martian, Project Hail Mary</title>
+  <meta name="description" content="Fan site for Andy Weir — bestselling author of The Martian, Project Hail Mary, and Artemis. Hard science fiction grounded in real orbital mechanics, astrobiology, and engineering." />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="Andy Weir — Hard Science Fiction Author" />
+  <meta property="og:description" content="Author of The Martian and Project Hail Mary. Hard science. Real problems. Engineering solutions." />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@andyweirauthor" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@400;500;600;700&family=Roboto+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #FF6B35;
+      --orange-dark: #C1440E;
+      --cyan: #00F0FF;
+      --space: #0B0D17;
+      --hud: #1A1E2E;
+      --green: #00C851;
+      --text: #F0F4F8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--space);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    ::selection { background: rgba(255,107,53,0.3); color: #fff; }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ── UTILITY ── */
+    .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+    .container--narrow { max-width: 900px; }
+    .font-orbitron { font-family: 'Orbitron', sans-serif; }
+    .font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+    .font-mono { font-family: 'Roboto Mono', monospace; }
+
+    .section-border { border-top: 1px solid rgba(0,240,255,0.1); }
+
+    /* ── BACKGROUNDS ── */
+    .hex-bg {
+      background-image:
+        radial-gradient(circle, rgba(0,240,255,0.05) 1px, transparent 1px),
+        radial-gradient(circle, rgba(0,240,255,0.05) 1px, transparent 1px);
+      background-size: 30px 30px, 60px 60px;
+      background-position: 0 0, 15px 15px;
+    }
+    .circuit-bg {
+      background-image:
+        linear-gradient(rgba(0,240,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,240,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .scanline-overlay {
+      background-image: repeating-linear-gradient(
+        0deg, transparent, transparent 2px,
+        rgba(0,240,255,0.025) 2px, rgba(0,240,255,0.025) 4px
+      );
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes blink      { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes pulse-ring { 0%{transform:scale(.95);opacity:.5} 50%{transform:scale(1.05);opacity:.8} 100%{transform:scale(.95);opacity:.5} }
+    @keyframes bounce-y   { 0%,100%{transform:translateY(0)} 50%{transform:translateY(10px)} }
+    @keyframes sweep      { 0%{top:-10%;opacity:0} 10%{opacity:1} 90%{opacity:1} 100%{top:110%;opacity:0} }
+    @keyframes fadein     { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes slidedown  { from{opacity:0;transform:translateY(-100%)} to{opacity:1;transform:translateY(0)} }
+
+    .anim-blink    { animation: blink 1s step-end infinite; }
+    .anim-bounce   { animation: bounce-y 2s ease-in-out infinite; }
+    .anim-pulse    { animation: pulse-ring 4s ease-in-out infinite; }
+    .anim-fadein   { animation: fadein .6s ease both; }
+
+    /* ── GLOW TEXT ── */
+    .glow-text { text-shadow: 0 0 20px rgba(255,107,53,0.5), 0 0 40px rgba(255,107,53,0.3); }
+
+    /* ── HUD CORNERS ── */
+    .hud-corners { position: relative; }
+    .hud-corners::before, .hud-corners::after,
+    .hud-corners > .hc-bl, .hud-corners > .hc-br {
+      content: '';
+      position: absolute;
+      width: 14px; height: 14px;
+      border-color: var(--cyan);
+      border-style: solid;
+      pointer-events: none;
+    }
+    .hud-corners::before { top:0; left:0;  border-width: 1px 0 0 1px; }
+    .hud-corners::after  { top:0; right:0; border-width: 1px 1px 0 0; }
+    .hud-corners > .hc-bl { bottom:0; left:0;  border-width: 0 0 1px 1px; }
+    .hud-corners > .hc-br { bottom:0; right:0; border-width: 0 1px 1px 0; }
+
+    /* ── CHAMFER CLIP ── */
+    .chamfer { clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%); }
+
+    /* ── SECTION CHIP ── */
+    .section-chip {
+      display: inline-block;
+      padding: .25rem .75rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(0,240,255,0.3);
+      color: var(--cyan);
+      font-family: 'Roboto Mono', monospace;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      background: rgba(0,240,255,0.05);
+    }
+
+    /* ══════════════════════════════════════
+       1. NAVBAR
+    ══════════════════════════════════════ */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.25rem 0;
+      transition: background .3s, border-color .3s, padding .3s;
+      border-bottom: 1px solid transparent;
+    }
+    #navbar.scrolled {
+      background: rgba(11,13,23,0.95);
+      backdrop-filter: blur(10px);
+      border-color: rgba(255,107,53,0.4);
+      padding: .75rem 0;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: .15em;
+      z-index: 110;
+    }
+    .nav-logo span { color: var(--orange); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: .85rem;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: rgba(240,244,248,0.7);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-cta {
+      padding: .5rem 1.25rem;
+      border: 1px solid var(--cyan);
+      color: var(--cyan) !important;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: .85rem;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+      transition: background .2s !important;
+    }
+    .nav-cta:hover { background: rgba(0,240,255,0.1) !important; }
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      z-index: 110;
+      color: var(--cyan);
+    }
+    .nav-hamburger svg { display: block; }
+
+    /* Mobile menu */
+    #mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: var(--space);
+      border-bottom: 1px solid rgba(0,240,255,0.3);
+      padding: 6rem 2rem 2rem;
+      flex-direction: column;
+      animation: slidedown .3s ease both;
+    }
+    #mobile-menu.open { display: flex; }
+    .mobile-menu-label {
+      font-family: 'Roboto Mono', monospace;
+      font-size: .7rem;
+      color: rgba(0,240,255,0.5);
+      border-bottom: 1px solid rgba(0,240,255,0.2);
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+    .mobile-menu-links { display: flex; flex-direction: column; gap: 1.5rem; list-style: none; }
+    .mobile-menu-links a {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.6rem;
+      transition: color .2s;
+    }
+    .mobile-menu-links a:hover { color: var(--orange); }
+    .mobile-menu-cta {
+      margin-top: auto;
+      margin-bottom: 2rem;
+      display: block;
+      text-align: center;
+      padding: 1rem;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      background: rgba(0,240,255,0.05);
+      clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+      transition: background .2s;
+    }
+    .mobile-menu-cta:hover { background: rgba(0,240,255,0.1); }
+
+    /* ══════════════════════════════════════
+       2. HERO
+    ══════════════════════════════════════ */
+    #home {
+      position: relative;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding-top: 5rem;
+    }
+    #starfield {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero-scanline {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    }
+    .hud-ring {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      border-radius: 50%;
+      border: 1px solid rgba(0,240,255,0.12);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hud-ring-1 { width: 800px; height: 800px; animation: pulse-ring 4s ease-in-out infinite; }
+    .hud-ring-2 { width: 600px; height: 600px; animation: pulse-ring 4s ease-in-out infinite; animation-delay: 1s; }
+    .telemetry {
+      position: absolute;
+      top: 7rem;
+      font-family: 'Roboto Mono', monospace;
+      font-size: .7rem;
+      letter-spacing: .1em;
+      line-height: 1.8;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .telemetry-left  { left: 1.5rem;  color: rgba(0,240,255,0.4); }
+    .telemetry-right { right: 1.5rem; text-align: right; }
+    .telemetry-right .cyan  { color: rgba(0,240,255,0.4); }
+    .telemetry-right .mars  { color: var(--orange); }
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 1.5rem;
+    }
+    .hero-badge {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      padding: .25rem .75rem;
+      border: 1px solid rgba(0,240,255,0.4);
+      color: var(--cyan);
+      font-family: 'Roboto Mono', monospace;
+      font-size: .7rem;
+      letter-spacing: .15em;
+      background: rgba(0,240,255,0.1);
+      animation: fadein .5s ease both;
+    }
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: clamp(3.5rem, 11vw, 9rem);
+      line-height: 1;
+      margin-bottom: 1rem;
+      animation: fadein .8s .2s ease both;
+    }
+    .hero-title .white { color: var(--text); }
+    .hero-title .orange { color: var(--orange); }
+    .hero-subtitle {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      letter-spacing: .2em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      font-size: clamp(1rem, 3vw, 1.75rem);
+      margin-bottom: 1.25rem;
+      animation: fadein .5s .4s ease both;
+    }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: rgba(240,244,248,0.8);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      font-weight: 300;
+      animation: fadein .5s .5s ease both;
+    }
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      animation: fadein .5s .6s ease both;
+    }
+    .btn-outline-cyan {
+      padding: 1rem 2rem;
+      border: 2px solid var(--cyan);
+      color: var(--cyan);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+      transition: background .2s, box-shadow .2s;
+      background: transparent;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .btn-outline-cyan:hover { background: rgba(0,240,255,0.1); box-shadow: 0 0 15px rgba(0,240,255,0.3); }
+    .btn-solid-orange {
+      padding: 1rem 2rem;
+      background: var(--orange);
+      color: var(--space);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+      transition: background .2s, box-shadow .2s;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .btn-solid-orange:hover { background: var(--orange-dark); box-shadow: 0 0 15px rgba(255,107,53,0.5); }
+    .hero-chevron {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(0,240,255,0.5);
+      z-index: 5;
+      animation: bounce-y 2s ease-in-out infinite;
+    }
+
+    /* ══════════════════════════════════════
+       3. ABOUT
+    ══════════════════════════════════════ */
+    #about {
+      padding: 6rem 0;
+      position: relative;
+    }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    .author-photo-wrap {
+      position: relative;
+      aspect-ratio: 4/5;
+      background: linear-gradient(135deg, var(--hud), var(--space));
+      border: 1px solid rgba(0,240,255,0.2);
+      overflow: hidden;
+    }
+    .author-photo-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+    .author-photo-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(11,13,23,0.8) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .author-photo-label {
+      position: absolute;
+      bottom: .75rem; left: .75rem; right: .75rem;
+    }
+    .author-photo-label .name-label {
+      font-family: 'Roboto Mono', monospace;
+      font-size: .6rem;
+      color: rgba(0,240,255,0.7);
+      text-transform: uppercase;
+      letter-spacing: .15em;
+    }
+    .author-photo-label .credit {
+      font-family: 'Roboto Mono', monospace;
+      font-size: .6rem;
+      color: rgba(255,107,53,0.6);
+    }
+    .stats-box {
+      background: var(--hud);
+      border-left: 4px solid var(--green);
+      padding: 1.25rem;
+      font-family: 'Roboto Mono', monospace;
+      font-size: .8rem;
+      line-height: 2;
+      color: rgba(240,244,248,0.8);
+      margin-top: 1rem;
+    }
+    .stats-box .label { color: var(--green); font-weight: 600; margin-bottom: .5rem; }
+    .stats-box .gt  { color: var(--orange); }
+    .stats-box .cursor {
+      display: inline-block;
+      width: 8px; height: 14px;
+      background: var(--green);
+      vertical-align: middle;
+      margin-left: 4px;
+      animation: blink 1s step-end infinite;
+    }
+    .bio-text { font-size: 1.05rem; color: rgba(240,244,248,0.8); line-height: 1.8; }
+    .bio-text p + p { margin-top: 1.25rem; }
+    .badges { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+    .badge {
+      padding: .25rem .75rem;
+      border: 1px solid rgba(0,200,81,0.4);
+      color: var(--green);
+      font-family: 'Roboto Mono', monospace;
+      font-size: .7rem;
+      background: rgba(0,200,81,0.05);
+    }
+
+    /* ══════════════════════════════════════
+       4. BOOKS
+    ══════════════════════════════════════ */
+    #books {
+      padding: 6rem 0;
+      background: var(--space);
+    }
+    .books-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+      gap: 1rem;
+    }
+    .books-count {
+      font-family: 'Roboto Mono', monospace;
+      color: var(--cyan);
+      font-size: .85rem;
+      letter-spacing: .1em;
+      margin-top: .5rem;
+    }
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1.5rem;
+    }
+    .book-card {
+      background: var(--hud);
+      border: 1px solid rgba(0,240,255,0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      transition: transform .3s, border-color .3s;
+    }
+    .book-card:hover { transform: translateY(-8px); }
+    .book-cover {
+      aspect-ratio: 2/3;
+      position: relative;
+      overflow: hidden;
+    }
+    .book-cover img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .book-cover-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 40%, rgba(0,0,0,0.6) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .book-format-badge {
+      position: absolute;
+      top: .5rem; right: .5rem;
+      z-index: 2;
+      padding: 2px 6px;
+      font-family: 'Roboto Mono', monospace;
+      font-size: .55rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      background: rgba(11,13,23,0.85);
+    }
+    .book-cover-title {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: .75rem;
+      z-index: 2;
+    }
+    .book-cover-title h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 900;
+      font-size: .8rem;
+      text-transform: uppercase;
+      color: #fff;
+      line-height: 1.2;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+    .book-cover-title .genre-tag {
+      font-family: 'Roboto Mono', monospace;
+      font-size: .55rem;
+      color: rgba(255,255,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-top: .2rem;
+    }
+    .book-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+    .book-meta {
+      font-family: 'Roboto Mono', monospace;
+      font-size: .7rem;
+      margin-bottom: 1rem;
+    }
+    .book-meta-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(0,240,255,0.1);
+      padding-bottom: .3rem;
+      margin-bottom: .3rem;
+    }
+    .book-meta-label { color: rgba(0,240,255,0.6); }
+    .book-meta-extra { font-size: .65rem; margin-top: .25rem; }
+    .book-desc {
+      font-size: .85rem;
+      color: rgba(240,244,248,0.6);
+      line-height: 1.6;
+      flex: 1;
+      margin-bottom: 1.25rem;
+    }
+    .book-btn {
+      display: block;
+      text-align: center;
+      padding: .6rem;
+      color: var(--space);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+      transition: opacity .2s;
+    }
+    .book-btn:hover { opacity: .8; }
+
+    /* Scan sweep on hover */
+    .book-card .scan-sweep {
+      position: absolute;
+      left: 0; width: 100%; height: 2px;
+      top: -10%; opacity: 0;
+      z-index: 20;
+      pointer-events: none;
+    }
+    .book-card:hover .scan-sweep { animation: sweep 1.5s linear infinite; }
+
+    /* The Egg callout */
+    .egg-card {
+      margin-top: 3rem;
+      border: 1px solid rgba(0,200,81,0.3);
+      background: rgba(0,200,81,0.05);
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      position: relative;
+    }
+    .egg-label { font-family: 'Roboto Mono', monospace; color: var(--green); font-size: .7rem; margin-bottom: .25rem; }
+    .egg-title { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; }
+    .egg-desc  { font-size: .85rem; color: rgba(240,244,248,0.7); margin-top: .3rem; max-width: 500px; }
+    .btn-outline-cyan-sm {
+      padding: .7rem 1.5rem;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+      transition: background .2s;
+      white-space: nowrap;
+      display: inline-block;
+    }
+    .btn-outline-cyan-sm:hover { background: rgba(0,240,255,0.1); }
+
+    /* ══════════════════════════════════════
+       5. SCIENCE DOSSIERS
+    ══════════════════════════════════════ */
+    #the-science {
+      padding: 6rem 0;
+      position: relative;
+    }
+    .science-verify {
+      display: inline-block;
+      padding: .5rem 1rem;
+      border: 1px solid var(--green);
+      color: var(--green);
+      font-family: 'Roboto Mono', monospace;
+      font-size: .8rem;
+      background: rgba(0,200,81,0.1);
+      margin-top: 1rem;
+      margin-bottom: 3rem;
+    }
+    .accordion-item {
+      border: 1px solid rgba(0,240,255,0.2);
+      background: rgba(26,30,46,0.8);
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .accordion-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      transition: background .2s;
+    }
+    .accordion-btn:hover { background: rgba(0,240,255,0.05); }
+    .accordion-btn-left { display: flex; align-items: center; gap: 1rem; }
+    .accordion-icon {
+      width: 40px; height: 40px;
+      border: 1px solid rgba(0,240,255,0.3);
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cyan);
+      flex-shrink: 0;
+    }
+    .accordion-dossier-id {
+      font-family: 'Roboto Mono', monospace;
+      color: var(--orange);
+      font-size: .7rem;
+      letter-spacing: .15em;
+      margin-bottom: .25rem;
+    }
+    .accordion-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+    .accordion-chevron {
+      color: var(--cyan);
+      transition: transform .3s;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+    }
+    .accordion-chevron.open { transform: rotate(180deg); }
+    .accordion-body {
+      display: none;
+      padding: 1.5rem;
+      padding-top: 0;
+      border-top: 1px solid rgba(0,240,255,0.1);
+    }
+    .accordion-body.open { display: block; }
+    .accordion-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 1.5rem 0;
+    }
+    .accordion-cols p { font-size: .9rem; color: rgba(240,244,248,0.8); line-height: 1.7; }
+    .terminal-box {
+      background: var(--space);
+      border-left: 4px solid var(--orange);
+      padding: 1rem;
+      font-family: 'Roboto Mono', monospace;
+      font-size: .75rem;
+      color: rgba(0,240,255,0.8);
+    }
+    .terminal-box .gt { color: var(--orange); }
+
+    /* ══════════════════════════════════════
+       6. TESTIMONIALS
+    ══════════════════════════════════════ */
+    #testimonials {
+      padding: 6rem 0;
+      background: var(--space);
+    }
+    .logs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    .log-card {
+      background: var(--hud);
+      border: 1px solid rgba(0,240,255,0.1);
+      border-left: 4px solid var(--orange);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .log-id {
+      font-family: 'Roboto Mono', monospace;
+      color: var(--orange);
+      font-size: .7rem;
+      letter-spacing: .15em;
+      margin-bottom: 1.5rem;
+    }
+    .log-quote {
+      font-size: 1rem;
+      color: rgba(240,244,248,0.9);
+      font-style: italic;
+      line-height: 1.7;
+      flex: 1;
+      margin-bottom: 1.5rem;
+    }
+    .log-source-row {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0,240,255,0.1);
+    }
+    .log-source {
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      flex: 1;
+    }
+    .signal-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+      flex-shrink: 0;
+    }
+
+    /* ══════════════════════════════════════
+       7. NEWSLETTER
+    ══════════════════════════════════════ */
+    #newsletter {
+      padding: 6rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .newsletter-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 800px; height: 800px;
+      background: rgba(255,107,53,0.05);
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+    }
+    .newsletter-inner {
+      position: relative; z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .newsletter-encrypting {
+      display: inline-block;
+      font-family: 'Roboto Mono', monospace;
+      color: var(--green);
+      font-size: .7rem;
+      background: rgba(0,200,81,0.1);
+      border: 1px solid rgba(0,200,81,0.3);
+      padding: .4rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .newsletter-form-wrap {
+      background: var(--space);
+      border: 1px solid rgba(0,240,255,0.2);
+      padding: 2.5rem;
+      margin-top: 1rem;
+      position: relative;
+    }
+    .newsletter-form { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .newsletter-input {
+      flex: 1;
+      min-width: 200px;
+      background: var(--hud);
+      border: 1px solid rgba(0,240,255,0.5);
+      color: var(--text);
+      font-family: 'Roboto Mono', monospace;
+      font-size: .85rem;
+      padding: 1rem;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .newsletter-input::placeholder { color: rgba(240,244,248,0.3); }
+    .newsletter-input:focus { border-color: var(--cyan); box-shadow: 0 0 10px rgba(0,240,255,0.2); }
+    .newsletter-btn {
+      padding: 1rem 2rem;
+      background: transparent;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+      cursor: pointer;
+      transition: background .2s;
+      white-space: nowrap;
+    }
+    .newsletter-btn:hover { background: rgba(0,240,255,0.1); }
+    .newsletter-btn:disabled { opacity: .5; cursor: not-allowed; }
+    .newsletter-success {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      color: var(--green);
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1rem;
+      padding: 1rem 0;
+    }
+    .newsletter-success .check-circle {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--green);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem;
+    }
+    .newsletter-fine {
+      font-family: 'Roboto Mono', monospace;
+      font-size: .65rem;
+      color: rgba(240,244,248,0.4);
+      text-transform: uppercase;
+      margin-top: 1rem;
+    }
+
+    /* ══════════════════════════════════════
+       8. CONTACT / SOCIALS
+    ══════════════════════════════════════ */
+    #contact {
+      padding: 6rem 0;
+      background: var(--space);
+      position: relative;
+    }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+    .socials-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .social-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem;
+      background: var(--hud);
+      border: 1px solid rgba(0,240,255,0.2);
+      transition: border-color .2s, background .2s;
+    }
+    .social-card:hover { border-color: var(--orange); background: rgba(255,107,53,0.05); }
+    .social-card-left { display: flex; align-items: center; gap: .75rem; }
+    .social-icon { font-size: 1.1rem; }
+    .social-label {
+      font-family: 'Roboto Mono', monospace;
+      font-size: .75rem;
+      text-transform: uppercase;
+      color: var(--text);
+      transition: color .2s;
+    }
+    .social-card:hover .social-label { color: var(--orange); }
+    .social-arrow { color: var(--cyan); font-size: 1rem; transition: color .2s; }
+    .social-card:hover .social-arrow { color: var(--orange); }
+    .signal-meter {
+      background: var(--hud);
+      border: 1px solid rgba(0,240,255,0.2);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .signal-title {
+      font-family: 'Roboto Mono', monospace;
+      color: var(--cyan);
+      font-size: .8rem;
+      margin-bottom: 1.5rem;
+    }
+    .signal-row { margin-bottom: 1.5rem; }
+    .signal-row-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Roboto Mono', monospace;
+      font-size: .75rem;
+      margin-bottom: .5rem;
+    }
+    .signal-track { height: 4px; background: var(--space); width: 100%; overflow: hidden; }
+    .signal-bar {
+      height: 100%;
+      width: 0;
+      transition: width 1s ease;
+      border-radius: 0;
+    }
+
+    /* ══════════════════════════════════════
+       9. FOOTER
+    ══════════════════════════════════════ */
+    footer {
+      background: #000;
+      border-top: 1px solid rgba(0,240,255,0.2);
+      padding: 4rem 0 2rem;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand-name {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.4rem;
+      letter-spacing: .15em;
+      margin-bottom: 1rem;
+    }
+    .footer-brand-name span { color: var(--orange); }
+    .footer-tagline {
+      font-family: 'Rajdhani', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      font-size: .85rem;
+      color: rgba(240,244,248,0.6);
+      max-width: 240px;
+    }
+    .footer-col-title {
+      font-family: 'Roboto Mono', monospace;
+      color: var(--cyan);
+      font-size: .75rem;
+      margin-bottom: 1rem;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: .5rem; }
+    .footer-links a {
+      font-family: 'Roboto Mono', monospace;
+      font-size: .7rem;
+      color: rgba(240,244,248,0.7);
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--orange); }
+    .footer-links .arrow { color: var(--cyan); margin-right: .5rem; }
+    .footer-terminal {
+      background: var(--space);
+      border-left: 4px solid var(--green);
+      padding: 1rem;
+      font-family: 'Roboto Mono', monospace;
+      font-size: .7rem;
+      color: rgba(0,200,81,0.8);
+      line-height: 2;
+      align-self: flex-start;
+    }
+    .footer-terminal .gt { color: var(--cyan); }
+    .footer-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(0,240,255,0.1);
+      font-family: 'Roboto Mono', monospace;
+      font-size: .6rem;
+      color: rgba(240,244,248,0.4);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      gap: 1rem;
+      text-align: center;
+    }
+    .footer-bottom .italic { font-style: italic; color: rgba(0,240,255,0.5); }
+
+    /* ══════════════════════════════════════
+       HEADINGS
+    ══════════════════════════════════════ */
+    .section-heading {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    .text-orange { color: var(--orange); }
+    .text-cyan   { color: var(--cyan);   }
+
+    /* ══════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .about-grid    { grid-template-columns: 1fr; }
+      .contact-grid  { grid-template-columns: 1fr; }
+      .footer-grid   { grid-template-columns: 1fr 1fr; }
+      .accordion-cols { grid-template-columns: 1fr; gap: 1rem; }
+      .telemetry     { display: none; }
+    }
+    @media (max-width: 640px) {
+      .nav-links     { display: none; }
+      .nav-hamburger { display: block; }
+      .footer-grid   { grid-template-columns: 1fr; }
+      .socials-grid  { grid-template-columns: 1fr; }
+      .hero-buttons  { flex-direction: column; width: 100%; }
+      .btn-outline-cyan, .btn-solid-orange { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════
+       NAVBAR
+  ════════════════════════════════════════ -->
+  <header id="navbar">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#home" class="nav-logo"><span>ANDY</span> WEIR</a>
+        <nav>
+          <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#books">Books</a></li>
+            <li><a href="#the-science">The Science</a></li>
+            <li><a href="#newsletter">Newsletter</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="https://www.amazon.com/dp/0593135202/" target="_blank" rel="noopener" class="nav-cta">Latest Book</a></li>
+          </ul>
+        </nav>
+        <button class="nav-hamburger" id="hamburger-btn" aria-label="Open menu">
+          <svg id="icon-menu" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6"  x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          <svg id="icon-close" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu">
+    <div class="mobile-menu-label">// SYSTEM MENU INITIALIZED</div>
+    <ul class="mobile-menu-links">
+      <li><a href="#home"        onclick="closeMenu()">Home</a></li>
+      <li><a href="#about"       onclick="closeMenu()">About</a></li>
+      <li><a href="#books"       onclick="closeMenu()">Books</a></li>
+      <li><a href="#the-science" onclick="closeMenu()">The Science</a></li>
+      <li><a href="#newsletter"  onclick="closeMenu()">Newsletter</a></li>
+      <li><a href="#contact"     onclick="closeMenu()">Contact</a></li>
+    </ul>
+    <a href="https://www.amazon.com/dp/0593135202/" target="_blank" rel="noopener" class="mobile-menu-cta" onclick="closeMenu()">
+      INITIATE LATEST BOOK PURCHASE
+    </a>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       HERO
+  ════════════════════════════════════════ -->
+  <section id="home">
+    <canvas id="starfield"></canvas>
+    <div class="hero-scanline scanline-overlay"></div>
+    <div class="hud-ring hud-ring-1"></div>
+    <div class="hud-ring hud-ring-2"></div>
+
+    <div class="telemetry telemetry-left">
+      SYS: NOMINAL<br>ORBIT: 400KM<br>SIGNAL: 99.4%<br>▶ ONLINE
+    </div>
+    <div class="telemetry telemetry-right">
+      <span class="cyan">LAT: 18.3°N<br>LON: 77.5°E<br>ALT: SURFACE<br></span>
+      <span class="mars">MARS SOL 549</span>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-badge">// MISSION PROFILE LOADED</div>
+      <h1 class="hero-title glow-text">
+        <span class="white">ANDY</span> <span class="orange">WEIR</span>
+      </h1>
+      <p class="hero-subtitle">Science Fiction By A Scientist</p>
+      <p class="hero-desc">Author of The Martian and Project Hail Mary. Hard science. Real problems. Engineering solutions.</p>
+      <div class="hero-buttons">
+        <a href="https://www.amazon.com/dp/0593135202/" target="_blank" rel="noopener" class="btn-outline-cyan">
+          ▶ INITIATE SEQUENCE — BUY LATEST BOOK
+        </a>
+        <a href="#books" class="btn-solid-orange">◈ VIEW THE ARCHIVE</a>
+      </div>
+    </div>
+
+    <div class="hero-chevron anim-bounce">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       ABOUT
+  ════════════════════════════════════════ -->
+  <section id="about" class="hex-bg section-border">
+    <div class="container">
+      <div class="section-chip">// MISSION PROFILE — AUTHOR DOSSIER</div>
+      <h2 class="section-heading">The <span class="text-orange">Engineer</span> Who Writes</h2>
+
+      <div class="about-grid">
+        <!-- Left: photo + stats -->
+        <div>
+          <div class="author-photo-wrap hud-corners">
+            <div class="hc-bl"></div><div class="hc-br"></div>
+            <img
+              src="https://images.penguinrandomhouse.com/author/2052673"
+              alt="Andy Weir — Author"
+              onerror="this.style.display='none'; document.getElementById('photo-fallback').style.display='flex';"
+            />
+            <div id="photo-fallback" style="display:none; position:absolute; inset:0; align-items:center; justify-content:center; flex-direction:column; gap:.5rem;">
+              <div style="font-family:'Orbitron',sans-serif; font-size:4rem; font-weight:900; color:rgba(255,107,53,0.2);">AW</div>
+              <div style="font-family:'Roboto Mono',monospace; font-size:.6rem; color:rgba(0,240,255,0.4); text-transform:uppercase; letter-spacing:.15em;">Photo Unavailable</div>
+            </div>
+            <div class="author-photo-overlay"></div>
+            <div class="author-photo-label">
+              <div class="name-label">Andy Weir — Author</div>
+              <div class="credit">© Penguin Random House</div>
+            </div>
+          </div>
+
+          <div class="stats-box">
+            <div class="label">// SYSTEM STATS — AUTHOR v2.0</div>
+            <div><span class="gt">&gt;</span> BOOKS_SOLD: 5,000,000+</div>
+            <div><span class="gt">&gt;</span> ACCURACY_RATING: 99.9%</div>
+            <div><span class="gt">&gt;</span> OCCUPATION: WRITER / ENGINEER</div>
+            <div><span class="gt">&gt;</span> ADAPTATIONS: MAJOR FILM (2015)</div>
+            <div><span class="gt">&gt;</span> STATUS: ■ ACTIVE — PUBLISHING <span class="cursor"></span></div>
+          </div>
+        </div>
+
+        <!-- Right: bio -->
+        <div>
+          <div class="bio-text">
+            <p>Andy Weir built a career as a software programmer for companies including AOL, Palm, MobileIron, and Sandia National Laboratories. A devoted hobbyist of subjects like relativistic physics, orbital mechanics, and the history of manned spaceflight, he began writing The Martian as a free serial on his website at the urging of his fans.</p>
+            <p>After reader demand, he published the full novel on Amazon's Kindle store in 2011 at the lowest possible price: 99 cents. It became an instant bestseller, climbing to #1 on Amazon's science fiction list within weeks. Crown Publishing picked it up for a major publishing deal, and it was made into a blockbuster film directed by Ridley Scott, starring Matt Damon.</p>
+            <p>His approach to fiction is deeply scientific: he researches every technical detail — orbital mechanics, atmospheric chemistry, agricultural botany, and astrobiology — so that readers can trust that his characters are solving real problems with real science.</p>
+            <p>He writes what readers call 'competence porn': smart people solving hard problems with engineering and grit. His subsequent novels and the graphic novel Cheshire Crossing continue this tradition of combining humor, suspense, and iron-clad scientific rigor.</p>
+          </div>
+          <div class="badges">
+            <div class="badge">✓ NYT Bestseller</div>
+            <div class="badge">✓ Major Film Adaptation</div>
+            <div class="badge">✓ Ex-Software Engineer</div>
+            <div class="badge">✓ Hard Sci-Fi Pioneer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       BOOKS
+  ════════════════════════════════════════ -->
+  <section id="books" class="circuit-bg section-border">
+    <div class="container">
+      <div class="section-chip">// THE ARCHIVE — MISSION DATABASE</div>
+      <div class="books-header">
+        <div>
+          <h2 class="section-heading">Published <span class="text-orange">Works</span></h2>
+          <div class="books-count">4 entries logged // All calculations verified</div>
+        </div>
+      </div>
+
+      <div class="books-grid" id="books-grid"></div>
+
+      <div class="egg-card hud-corners">
+        <div class="hc-bl"></div><div class="hc-br"></div>
+        <div>
+          <div class="egg-label">// SHORT FICTION UPLINK</div>
+          <div class="egg-title">THE EGG</div>
+          <div class="egg-desc">A short story about the universe, reincarnation, and the meaning of life. Translated into over 30 languages.</div>
+        </div>
+        <a href="https://galactanet.com/oneoff/theegg_mod.html" target="_blank" rel="noopener" class="btn-outline-cyan-sm">READ TRANSMISSION</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       SCIENCE DOSSIERS
+  ════════════════════════════════════════ -->
+  <section id="the-science" class="hex-bg section-border">
+    <div class="container container--narrow">
+      <div class="section-chip">// SCIENTIFIC DOSSIERS — DECLASSIFIED</div>
+      <h2 class="section-heading">The Science Behind <span class="text-cyan">The Fiction</span></h2>
+      <div class="science-verify">✓ CALCULATIONS CHECK OUT — PHYSICS COMPLIANT — ALL SYSTEMS VERIFIED</div>
+
+      <div id="accordion"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       TESTIMONIALS
+  ════════════════════════════════════════ -->
+  <section id="testimonials" class="section-border">
+    <div class="container">
+      <div class="section-chip">// MISSION LOG — VERIFIED TRANSMISSIONS</div>
+      <h2 class="section-heading">Incoming <span class="text-orange">Signals</span></h2>
+      <div class="logs-grid">
+        <div class="log-card hud-corners">
+          <div class="hc-bl"></div><div class="hc-br"></div>
+          <div class="log-id">LOG-001 // THE MARTIAN</div>
+          <div class="log-quote">"Duct tape and science saved Mark Watney. Every technical detail is accurate to real NASA protocols. I read this as a mission planning exercise — it holds up. I laughed and panicked equally."</div>
+          <div class="log-source-row">
+            <div class="log-source">Amazon Verified Reader</div>
+            <div class="signal-dot"></div>
+          </div>
+        </div>
+        <div class="log-card hud-corners">
+          <div class="hc-bl"></div><div class="hc-br"></div>
+          <div class="log-id">LOG-002 // PROJECT HAIL MARY</div>
+          <div class="log-quote">"The most scientifically rigorous first contact story ever written. Weir's ability to make orbital mechanics feel like a thriller is unmatched. This book will be studied in universities."</div>
+          <div class="log-source-row">
+            <div class="log-source">Publisher's Weekly ★★★★★</div>
+            <div class="signal-dot"></div>
+          </div>
+        </div>
+        <div class="log-card hud-corners">
+          <div class="hc-bl"></div><div class="hc-br"></div>
+          <div class="log-id">LOG-003 // THE MARTIAN</div>
+          <div class="log-quote">"The physics checks out. All of it. I went through this with a red pen and gave up — I couldn't find an error. It's a textbook with a plot."</div>
+          <div class="log-source-row">
+            <div class="log-source">Ars Technica Science Editor</div>
+            <div class="signal-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       NEWSLETTER
+  ════════════════════════════════════════ -->
+  <section id="newsletter" class="circuit-bg section-border">
+    <div class="newsletter-glow"></div>
+    <div class="container">
+      <div class="newsletter-inner">
+        <div class="section-chip">// COMMUNICATIONS ARRAY — UPLINK READY</div>
+        <h2 class="section-heading">SUBSCRIBE TO <span class="text-orange">MISSION CONTROL</span></h2>
+        <p style="font-size:1.1rem; color:rgba(240,244,248,0.8); margin-bottom:1rem;">Free: "The Egg" short story + exclusive scientific appendix upon sign-up.</p>
+        <div class="newsletter-encrypting">// ENTERING TRANSMISSION MODE... ENCRYPTION ACTIVE // SIGNAL STRENGTH: 99.4%</div>
+
+        <div class="newsletter-form-wrap hud-corners">
+          <div class="hc-bl"></div><div class="hc-br"></div>
+          <div id="newsletter-success" class="newsletter-success">
+            <div class="check-circle">✓</div>
+            Signal received. Welcome to Mission Control.
+          </div>
+          <form class="newsletter-form" id="newsletter-form" onsubmit="submitNewsletter(event)">
+            <input type="email" required placeholder="Enter frequency (email)..." class="newsletter-input" id="newsletter-email" />
+            <button type="submit" class="newsletter-btn" id="newsletter-btn">TRANSMIT</button>
+          </form>
+        </div>
+        <div class="newsletter-fine">No spam. No orbital debris. Unsubscribe at T-any.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       CONTACT / SOCIALS
+  ════════════════════════════════════════ -->
+  <section id="contact" class="section-border">
+    <div style="position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(0,240,255,0.02) 0%, transparent 70%); pointer-events:none;"></div>
+    <div class="container" style="position:relative; z-index:1;">
+      <div class="section-chip">// UPLINK — EXTERNAL COMMS</div>
+      <h2 class="section-heading">Communications <span class="text-cyan">Array</span></h2>
+      <div class="contact-grid">
+        <div class="socials-grid">
+          <a href="https://andyweirauthor.com" target="_blank" rel="noopener" class="social-card">
+            <div class="social-card-left"><span class="social-icon">🌐</span><span class="social-label">andyweirauthor.com</span></div>
+            <span class="social-arrow">↗</span>
+          </a>
+          <a href="https://www.facebook.com/AndyWeirAuthor" target="_blank" rel="noopener" class="social-card">
+            <div class="social-card-left"><span class="social-icon">📘</span><span class="social-label">Facebook</span></div>
+            <span class="social-arrow">↗</span>
+          </a>
+          <a href="https://www.goodreads.com/author/show/6540057.Andy_Weir" target="_blank" rel="noopener" class="social-card">
+            <div class="social-card-left"><span class="social-icon">📚</span><span class="social-label">Goodreads</span></div>
+            <span class="social-arrow">↗</span>
+          </a>
+          <a href="https://www.instagram.com/andyweirauthor/" target="_blank" rel="noopener" class="social-card">
+            <div class="social-card-left"><span class="social-icon">📷</span><span class="social-label">Instagram</span></div>
+            <span class="social-arrow">↗</span>
+          </a>
+          <a href="https://www.reddit.com/r/andyweir/" target="_blank" rel="noopener" class="social-card">
+            <div class="social-card-left"><span class="social-icon">🤖</span><span class="social-label">r/AndyWeir</span></div>
+            <span class="social-arrow">↗</span>
+          </a>
+          <a href="https://x.com/andyweirauthor" target="_blank" rel="noopener" class="social-card">
+            <div class="social-card-left"><span class="social-icon">𝕏</span><span class="social-label">X / Twitter</span></div>
+            <span class="social-arrow">↗</span>
+          </a>
+          <a href="https://www.amazon.com/Andy-Weir/e/B00G0WYW92" target="_blank" rel="noopener" class="social-card">
+            <div class="social-card-left"><span class="social-icon">📦</span><span class="social-label">Amazon Author</span></div>
+            <span class="social-arrow">↗</span>
+          </a>
+        </div>
+
+        <div class="signal-meter">
+          <div class="signal-title">// SIGNAL STRENGTH METER</div>
+          <div class="signal-row">
+            <div class="signal-row-header">
+              <span style="color:rgba(240,244,248,0.8); font-family:'Roboto Mono',monospace; font-size:.75rem;">WEBSITE</span>
+              <span style="color:#00C851; font-family:'Roboto Mono',monospace; font-size:.75rem;">100%</span>
+            </div>
+            <div class="signal-track"><div class="signal-bar" style="background:#00C851; box-shadow: 0 0 10px #00C851;" data-width="100"></div></div>
+          </div>
+          <div class="signal-row">
+            <div class="signal-row-header">
+              <span style="color:rgba(240,244,248,0.8); font-family:'Roboto Mono',monospace; font-size:.75rem;">SOCIAL MEDIA</span>
+              <span style="color:#00C851; font-family:'Roboto Mono',monospace; font-size:.75rem;">92%</span>
+            </div>
+            <div class="signal-track"><div class="signal-bar" style="background:#00C851; box-shadow: 0 0 10px #00C851;" data-width="92"></div></div>
+          </div>
+          <div class="signal-row">
+            <div class="signal-row-header">
+              <span style="color:rgba(240,244,248,0.8); font-family:'Roboto Mono',monospace; font-size:.75rem;">PUBLISHING RELAYS</span>
+              <span style="color:#FF6B35; font-family:'Roboto Mono',monospace; font-size:.75rem;">78%</span>
+            </div>
+            <div class="signal-track"><div class="signal-bar" style="background:#FF6B35; box-shadow: 0 0 10px #FF6B35;" data-width="78"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════ -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-name"><span>ANDY</span> WEIR</div>
+          <div class="footer-tagline">Hard Science Fiction. Engineering Solutions. Real Problems.</div>
+        </div>
+        <div>
+          <div class="footer-col-title">// QUICK NAV</div>
+          <ul class="footer-links">
+            <li><a href="#about"><span class="arrow">→</span> Author Profile</a></li>
+            <li><a href="#books"><span class="arrow">→</span> Book Archive</a></li>
+            <li><a href="#the-science"><span class="arrow">→</span> Science Dossiers</a></li>
+            <li><a href="https://andyweirauthor.com" target="_blank" rel="noopener"><span class="arrow">→</span> Official Website</a></li>
+            <li><a href="https://galactanet.com/oneoff/theegg_mod.html" target="_blank" rel="noopener"><span class="arrow">→</span> "The Egg" Free Story</a></li>
+          </ul>
+        </div>
+        <div class="footer-terminal">
+          <div><span class="gt">&gt;</span> STATUS: ALL SYSTEMS NOMINAL</div>
+          <div><span class="gt">&gt;</span> PHYSICS: COMPLIANT</div>
+          <div><span class="gt">&gt;</span> MATH: VERIFIED</div>
+          <div><span class="gt">&gt;</span> UPTIME: ∞ SOL</div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div>© 2026 Andy Weir | All Systems Nominal</div>
+        <div class="italic">Calculations verified. Physics compliant.</div>
+        <div>Fan site. Not officially affiliated with Andy Weir.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ═══════════════════════════════════════
+       DATA
+    ════════════════════════════════════════ */
+    const BOOKS = [
+      {
+        title: "THE MARTIAN", year: "2011 / 2014", pages: "369", scienceBars: 5,
+        format: "NOVEL", formatColor: "#FF6B35", accentColor: "#C1440E",
+        coverBg: "linear-gradient(155deg,#C1440E 0%,#7B1A00 50%,#180800 100%)",
+        coverImg: "https://m.media-amazon.com/images/P/0804139024.01._SX350_BO1,204,203,200_.jpg",
+        genre: "HARD SCI-FI / SURVIVAL",
+        extra: "FILM: 2015 — RIDLEY SCOTT / MATT DAMON",
+        desc: "Astronaut Mark Watney is stranded alone on Mars with months of rations and a broken comms link. Every solution requires real chemistry, botany, and orbital mechanics.",
+        btnLabel: "GET THE BOOK",
+        amazon: "https://www.amazon.com/dp/0804139024/"
+      },
+      {
+        title: "PROJECT HAIL MARY", year: "2021", pages: "476", scienceBars: 5,
+        format: "NOVEL", formatColor: "#FF6B35", accentColor: "#D4A017",
+        coverBg: "linear-gradient(155deg,#D4A017 0%,#8B6914 50%,#251A04 100%)",
+        coverImg: "https://m.media-amazon.com/images/P/0593135202.01._SX350_BO1,204,203,200_.jpg",
+        genre: "HARD SCI-FI / FIRST CONTACT",
+        extra: "FILM: IN PRODUCTION — RYAN GOSLING",
+        desc: "A lone astronaut wakes with amnesia on an interstellar mission to save Earth. His only ally is an alien whose biology defies everything he thought he knew.",
+        btnLabel: "GET THE BOOK",
+        amazon: "https://www.amazon.com/dp/0593135202/"
+      },
+      {
+        title: "ARTEMIS", year: "2017", pages: "305", scienceBars: 4,
+        format: "NOVEL", formatColor: "#FF6B35", accentColor: "#8A9BB0",
+        coverBg: "linear-gradient(155deg,#8A9BB0 0%,#3D5068 50%,#0C1520 100%)",
+        coverImg: "https://m.media-amazon.com/images/P/0553448129.01._SX350_BO1,204,203,200_.jpg",
+        genre: "HARD SCI-FI / HEIST",
+        extra: "SETTING: ARTEMIS LUNAR CITY",
+        desc: "Smuggler Jazz Bashara lives in humanity's first Moon base. When she stumbles into a conspiracy, chemistry and engineering become her only weapons.",
+        btnLabel: "GET THE BOOK",
+        amazon: "https://www.amazon.com/dp/0553448129/"
+      },
+      {
+        title: "CHESHIRE CROSSING", year: "2019", pages: "128", scienceBars: 3,
+        format: "GRAPHIC NOVEL", formatColor: "#A855F7", accentColor: "#6B3FA0",
+        coverBg: "linear-gradient(155deg,#6B3FA0 0%,#2D1A5C 50%,#0C0820 100%)",
+        coverImg: "https://covers.openlibrary.org/b/isbn/9781984800763-L.jpg",
+        genre: "FANTASY / GRAPHIC NOVEL",
+        extra: "ILLUSTRATED BY SARAH ANDERSEN",
+        desc: "Alice, Dorothy, and Wendy meet at a therapeutic boarding school. Recovery becomes a cross-dimensional battle against the villains of their stories.",
+        btnLabel: "VIEW GRAPHIC NOVEL",
+        amazon: "https://www.amazon.com/dp/1984800763/"
+      }
+    ];
+
+    const DOSSIERS = [
+      {
+        id: "001", book: "THE MARTIAN",
+        title: "Orbital Mechanics & Mars Trajectories",
+        left: "Orbital mechanics governs every aspect of space travel—launch windows, transfer orbits, fuel requirements. Weir calculated exact Hohmann transfer orbits between Earth and Mars to determine when rescue missions were physically possible.",
+        right: "Mark Watney's rescue required precise calculation of Earth-Mars relative positions and the Rich Purnell Maneuver—a gravity assist around Earth that Weir modeled against actual planetary positions. NASA engineers confirmed the math holds.",
+        terminal: "DELTA-V Mars-Earth Hohmann: ~3.6 km/s // Orbital period offset: 779 Martian sols // Window accuracy: ±12 hours"
+      },
+      {
+        id: "002", book: "PROJECT HAIL MARY",
+        title: "Astrobiology & Astrophage Biochemistry",
+        left: "Weir invented astrophage—a microorganism that metabolizes solar energy for thrust—grounded in real biochemistry: cell membrane physics, ATP energy transfer, and thermodynamic constraints on life at extreme temperatures near a star.",
+        right: "Ryland Grace and alien Rocky communicate via physics fundamentals—frequency spectrums and mathematical constants. Weir designed Rocky's biology using ammonia chemistry rather than water, consistent with known carbon-free biochemistry.",
+        terminal: "Astrophage energy density: ~2.9×10²¹ J/kg // Tau Ceti: 11.9 ly // Rocky metabolism: sulfuric acid // Comms: prime-sequence frequency bursts"
+      },
+      {
+        id: "003", book: "ARTEMIS",
+        title: "Lunar Economics & Chloroform Chemistry",
+        left: "A lunar economy requires oxygen from regolith electrolysis, aluminum smelting from anorthosite rock, and managed atmosphere recycling. Weir based Artemis city's industry on real ISRU (In-Situ Resource Utilization) proposals.",
+        right: "Jazz's sabotage hinges on chloroform's exact properties and dispersal rates in a pressurized dome. Weir calculated the concentration to incapacitate workers without fatalities—then realized the math created a plot problem and solved it with more chemistry.",
+        terminal: "Lunar gravity: 1.62 m/s² // O₂ from regolith: ~45% by mass // CHCl₃ threshold: ~5,000 ppm // Dome pressure: 0.207 atm"
+      }
+    ];
+
+    /* ═══════════════════════════════════════
+       RENDER BOOKS
+    ════════════════════════════════════════ */
+    function scienceBars(count) {
+      return Array.from({length:5}).map((_,i) => i < count ? '⬛' : '⬜').join('');
+    }
+
+    const grid = document.getElementById('books-grid');
+    BOOKS.forEach(book => {
+      grid.innerHTML += `
+        <div class="book-card" style="--accent:${book.accentColor}"
+          onmouseenter="this.style.borderColor='${book.accentColor}99'"
+          onmouseleave="this.style.borderColor='rgba(0,240,255,0.2)'">
+          <div class="scan-sweep" style="background:${book.accentColor}; box-shadow:0 0 10px ${book.accentColor};"></div>
+          <div class="book-cover" style="background:${book.coverBg}">
+            <img src="${book.coverImg}" alt="${book.title} cover" onerror="this.style.display='none'">
+            <div class="book-cover-overlay"></div>
+            <div class="book-format-badge" style="color:${book.formatColor}; border:1px solid ${book.formatColor}">${book.format}</div>
+            <div class="book-cover-title">
+              <h3>${book.title}</h3>
+              <div class="genre-tag">${book.genre}</div>
+            </div>
+          </div>
+          <div class="book-body">
+            <div class="book-meta">
+              <div class="book-meta-row"><span class="book-meta-label">YEAR</span><span>${book.year}</span></div>
+              <div class="book-meta-row"><span class="book-meta-label">LENGTH</span><span>${book.pages} pg</span></div>
+              <div class="book-meta-row">
+                <span class="book-meta-label">SCIENCE</span>
+                <span style="color:${book.accentColor}; letter-spacing:.1em; font-size:.65rem">${scienceBars(book.scienceBars)} ${book.scienceBars}/5</span>
+              </div>
+              <div class="book-meta-extra" style="color:${book.accentColor}">${book.extra}</div>
+            </div>
+            <p class="book-desc">${book.desc}</p>
+            <a href="${book.amazon}" target="_blank" rel="noopener noreferrer" class="book-btn" style="background:${book.accentColor}">
+              ${book.btnLabel}
+            </a>
+          </div>
+        </div>`;
+    });
+
+    /* ═══════════════════════════════════════
+       RENDER ACCORDION
+    ════════════════════════════════════════ */
+    const accordionEl = document.getElementById('accordion');
+    DOSSIERS.forEach((d, i) => {
+      const isOpen = i === 0;
+      accordionEl.innerHTML += `
+        <div class="accordion-item">
+          <button class="accordion-btn" onclick="toggleAccordion('${d.id}')">
+            <div class="accordion-btn-left">
+              <div class="accordion-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+              </div>
+              <div>
+                <div class="accordion-dossier-id">DOSSIER-${d.id} // ${d.book}</div>
+                <div class="accordion-title">${d.title}</div>
+              </div>
+            </div>
+            <div class="accordion-chevron ${isOpen ? 'open' : ''}" id="chevron-${d.id}">&#8964;</div>
+          </button>
+          <div class="accordion-body ${isOpen ? 'open' : ''}" id="body-${d.id}">
+            <div class="accordion-cols">
+              <p>${d.left}</p>
+              <p>${d.right}</p>
+            </div>
+            <div class="terminal-box">
+              ${d.terminal.split(' // ').map(l => `<div><span class="gt">&gt;</span> ${l}</div>`).join('')}
+            </div>
+          </div>
+        </div>`;
+    });
+
+    function toggleAccordion(id) {
+      const body    = document.getElementById('body-' + id);
+      const chevron = document.getElementById('chevron-' + id);
+      const isOpen  = body.classList.contains('open');
+      // close all
+      document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
+      document.querySelectorAll('.accordion-chevron').forEach(c => c.classList.remove('open'));
+      // open clicked if it was closed
+      if (!isOpen) { body.classList.add('open'); chevron.classList.add('open'); }
+    }
+
+    /* ═══════════════════════════════════════
+       NAVBAR SCROLL
+    ════════════════════════════════════════ */
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+      animateBars();
+    });
+
+    /* ═══════════════════════════════════════
+       MOBILE MENU
+    ════════════════════════════════════════ */
+    function closeMenu() {
+      document.getElementById('mobile-menu').classList.remove('open');
+      document.getElementById('icon-menu').style.display  = 'block';
+      document.getElementById('icon-close').style.display = 'none';
+    }
+    document.getElementById('hamburger-btn').addEventListener('click', () => {
+      const menu = document.getElementById('mobile-menu');
+      const open = menu.classList.toggle('open');
+      document.getElementById('icon-menu').style.display  = open ? 'none'  : 'block';
+      document.getElementById('icon-close').style.display = open ? 'block' : 'none';
+    });
+
+    /* ═══════════════════════════════════════
+       NEWSLETTER
+    ════════════════════════════════════════ */
+    function submitNewsletter(e) {
+      e.preventDefault();
+      const btn = document.getElementById('newsletter-btn');
+      btn.textContent = 'TRANSMITTING...';
+      btn.disabled = true;
+      setTimeout(() => {
+        document.getElementById('newsletter-form').style.display = 'none';
+        const success = document.getElementById('newsletter-success');
+        success.style.display = 'flex';
+        setTimeout(() => {
+          success.style.display = 'none';
+          document.getElementById('newsletter-form').style.display = 'flex';
+          document.getElementById('newsletter-email').value = '';
+          btn.textContent = 'TRANSMIT';
+          btn.disabled = false;
+        }, 5000);
+      }, 1000);
+    }
+
+    /* ═══════════════════════════════════════
+       SIGNAL BARS ANIMATION
+    ════════════════════════════════════════ */
+    let barsAnimated = false;
+    function animateBars() {
+      if (barsAnimated) return;
+      const section = document.getElementById('contact');
+      if (!section) return;
+      const rect = section.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.85) {
+        barsAnimated = true;
+        document.querySelectorAll('.signal-bar').forEach(bar => {
+          bar.style.width = bar.dataset.width + '%';
+        });
+      }
+    }
+    animateBars();
+
+    /* ═══════════════════════════════════════
+       STARFIELD CANVAS
+    ════════════════════════════════════════ */
+    (function() {
+      const canvas = document.getElementById('starfield');
+      const ctx    = canvas.getContext('2d');
+      let frame    = 0;
+      let scrollY  = 0;
+
+      window.addEventListener('scroll', () => { scrollY = window.scrollY; });
+
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      const stars = Array.from({length: 220}).map(() => ({
+        x:             Math.random() * canvas.width,
+        y:             Math.random() * canvas.height,
+        size:          Math.random() * 1.5 + 0.5,
+        blinkSpeed:    Math.random() * 0.02 + 0.01,
+        opacity:       Math.random(),
+        parallaxFactor:Math.random() * 0.5 + 0.1
+      }));
+
+      const shootingStars = [];
+
+      function draw() {
+        frame++;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        stars.forEach(s => {
+          s.opacity += s.blinkSpeed;
+          const alpha  = (Math.sin(s.opacity) + 1) / 2;
+          const yOff   = (scrollY * s.parallaxFactor) % canvas.height;
+          let finalY   = s.y - yOff;
+          if (finalY < 0) finalY += canvas.height;
+          ctx.fillStyle = `rgba(240,244,248,${alpha * 0.8})`;
+          ctx.beginPath();
+          ctx.arc(s.x, finalY, s.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        if (frame % 280 === 0) {
+          shootingStars.push({
+            x: Math.random() * canvas.width,
+            y: 0,
+            length: Math.random() * 80 + 20,
+            speed:  Math.random() * 10 + 15,
+            angle:  Math.PI / 4 + Math.random() * 0.2
+          });
+        }
+
+        for (let i = shootingStars.length - 1; i >= 0; i--) {
+          const ss = shootingStars[i];
+          ss.x -= ss.speed * Math.cos(ss.angle);
+          ss.y += ss.speed * Math.sin(ss.angle);
+          ctx.strokeStyle = '#FF6B35';
+          ctx.lineWidth   = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(ss.x, ss.y);
+          ctx.lineTo(ss.x + ss.length * Math.cos(ss.angle), ss.y - ss.length * Math.sin(ss.angle));
+          ctx.stroke();
+          if (ss.y > canvas.height || ss.x < 0) shootingStars.splice(i, 1);
+        }
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+  </script>
+</body>
+</html>
