@@ -5,11 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Andy Weir — Hard Science Fiction Author</title>
 <meta name="description" content="Andy Weir, #1 New York Times bestselling author of The Martian, Artemis, and Project Hail Mary.">
+<link rel="canonical" href="https://andyweir.vercel.app/">
+
+<!-- Favicon: orbital dot mark, matches site signature -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230A0D12'/%3E%3Cpath d='M6,46 C22,20 42,14 58,26' fill='none' stroke='%23232935' stroke-width='2'/%3E%3Ccircle cx='58' cy='26' r='6' fill='%23E0632B'/%3E%3C/svg%3E">
+
+<!-- Open Graph / Social Preview -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Andy Weir — Hard Science Fiction Author">
+<meta property="og:description" content="#1 New York Times bestselling author of The Martian, Artemis, and Project Hail Mary. Explore the mission log, editions, and translations.">
+<meta property="og:url" content="https://andyweir.vercel.app/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Andy Weir — Hard Science Fiction Author">
+<meta name="twitter:description" content="#1 New York Times bestselling author of The Martian, Artemis, and Project Hail Mary.">
+<meta name="twitter:site" content="@andyweirauthor">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+
+<!-- Structured data for search engines -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Andy Weir",
+  "url": "https://andyweir.vercel.app/",
+  "sameAs": [
+    "https://x.com/andyweirauthor",
+    "https://www.facebook.com/AndyWeirAuthor/",
+    "https://www.goodreads.com/author/show/6540057.Andy_Weir",
+    "http://galactanet.com/"
+  ],
+  "jobTitle": "Author",
+  "description": "Andy Weir is a #1 New York Times bestselling author known for hard science fiction novels including The Martian, Artemis, and Project Hail Mary."
+}
+</script>
 
 <style>
 :root{
@@ -77,6 +109,47 @@ body{
 
 ::selection{ background: var(--rust); color: var(--void); }
 
+/* Accessibility: visible focus state for keyboard users */
+a:focus-visible, button:focus-visible, input:focus-visible{
+  outline: 2px solid var(--rust);
+  outline-offset: 3px;
+}
+.skip-link{
+  position:absolute; left:-9999px; top:0; z-index:100;
+  background:var(--rust); color:var(--void); padding:12px 20px;
+  font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+}
+.skip-link:focus{ left:16px; top:16px; }
+
+/* Scroll reveal */
+[data-reveal]{
+  opacity:0; transform: translateY(18px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+[data-reveal].is-visible{ opacity:1; transform:none; }
+@media (prefers-reduced-motion: reduce){
+  [data-reveal]{ opacity:1; transform:none; transition:none; }
+}
+
+/* Scroll progress bar */
+#scroll-progress{
+  position:fixed; top:0; left:0; height:2px; width:0%;
+  background: var(--rust); z-index:60; transition: width .1s linear;
+}
+
+/* Back to top */
+#back-to-top{
+  position:fixed; bottom:28px; right:28px; z-index:50;
+  width:44px; height:44px;
+  background:var(--panel); border:1px solid var(--line);
+  color:var(--ink-dim);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition: opacity .3s ease, border-color .3s ease, color .3s ease;
+}
+#back-to-top.visible{ opacity:1; pointer-events:auto; }
+#back-to-top:hover{ border-color:var(--rust); color:var(--rust); }
+
 /* mission connector line */
 .mission-rail{
   position:relative;
@@ -91,6 +164,9 @@ body{
 </head>
 <body class="bg-void">
 
+<div id="scroll-progress"></div>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <!-- NAV -->
 <header class="fixed top-0 w-full z-50 backdrop-blur-md bg-void/80 border-b border-line">
   <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -98,20 +174,41 @@ body{
     <nav class="hidden md:flex items-center gap-10 font-mono text-xs tracking-widest text-dim uppercase">
       <a href="#about" class="hover:text-ink transition-colors">About</a>
       <a href="#missions" class="hover:text-ink transition-colors">Missions</a>
-      <a href="#log" class="hover:text-ink transition-colors">Log</a>
+      <a href="#log" class="hover:text-ink transition-colors">Updates</a>
       <span class="flex items-center gap-4 border-l border-line pl-6">
-        <a href="https://x.com/andyweirauthor" target="_blank" aria-label="Andy Weir on X" class="hover:text-rust transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
-        <a href="https://www.facebook.com/AndyWeirAuthor/" target="_blank" aria-label="Andy Weir on Facebook" class="hover:text-rust transition-colors"><i class="fa-brands fa-facebook"></i></a>
-        <a href="https://www.goodreads.com/author/show/6540057.Andy_Weir" target="_blank" aria-label="Andy Weir on Goodreads" class="hover:text-rust transition-colors"><i class="fa-brands fa-goodreads"></i></a>
-        <a href="http://galactanet.com/" target="_blank" aria-label="Andy Weir's personal site" class="hover:text-rust transition-colors"><i class="fa-solid fa-globe"></i></a>
+        <a href="https://x.com/andyweirauthor" target="_blank" rel="noopener noreferrer" aria-label="Andy Weir on X" class="hover:text-rust transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="https://www.facebook.com/AndyWeirAuthor/" target="_blank" rel="noopener noreferrer" aria-label="Andy Weir on Facebook" class="hover:text-rust transition-colors"><i class="fa-brands fa-facebook"></i></a>
+        <a href="https://www.goodreads.com/author/show/6540057.Andy_Weir" target="_blank" rel="noopener noreferrer" aria-label="Andy Weir on Goodreads" class="hover:text-rust transition-colors"><i class="fa-brands fa-goodreads"></i></a>
+        <a href="http://galactanet.com/" target="_blank" rel="noopener noreferrer" aria-label="Andy Weir's personal site" class="hover:text-rust transition-colors"><i class="fa-solid fa-globe"></i></a>
       </span>
     </nav>
-    <a href="#missions" class="font-mono text-xs tracking-widest uppercase bg-rust text-void px-5 py-2.5 font-medium hover:bg-white transition-colors">Get The Books</a>
+    <div class="flex items-center gap-4">
+      <a href="#missions" class="hidden sm:inline-block font-mono text-xs tracking-widest uppercase bg-rust text-void px-5 py-2.5 font-medium hover:bg-white transition-colors">Get The Books</a>
+      <button id="mobile-menu-btn" aria-label="Open menu" class="md:hidden text-ink text-xl w-9 h-9 flex items-center justify-center">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu panel -->
+  <div id="mobile-menu" class="hidden md:hidden bg-void border-t border-line">
+    <nav class="flex flex-col px-6 py-6 gap-5 font-mono text-sm tracking-widest text-dim uppercase">
+      <a href="#about" class="hover:text-ink transition-colors">About</a>
+      <a href="#missions" class="hover:text-ink transition-colors">Missions</a>
+      <a href="#log" class="hover:text-ink transition-colors">Updates</a>
+      <a href="#missions" class="text-center mt-2 bg-rust text-void px-5 py-3 font-medium">Get The Books</a>
+      <span class="flex items-center gap-6 justify-center border-t border-line pt-5 mt-2 text-lg">
+        <a href="https://x.com/andyweirauthor" target="_blank" rel="noopener noreferrer" aria-label="Andy Weir on X" class="hover:text-rust transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="https://www.facebook.com/AndyWeirAuthor/" target="_blank" rel="noopener noreferrer" aria-label="Andy Weir on Facebook" class="hover:text-rust transition-colors"><i class="fa-brands fa-facebook"></i></a>
+        <a href="https://www.goodreads.com/author/show/6540057.Andy_Weir" target="_blank" rel="noopener noreferrer" aria-label="Andy Weir on Goodreads" class="hover:text-rust transition-colors"><i class="fa-brands fa-goodreads"></i></a>
+        <a href="http://galactanet.com/" target="_blank" rel="noopener noreferrer" aria-label="Andy Weir's personal site" class="hover:text-rust transition-colors"><i class="fa-solid fa-globe"></i></a>
+      </span>
+    </nav>
   </div>
 </header>
 
 <!-- HERO -->
-<section class="relative min-h-screen flex items-center pt-20 overflow-hidden grain">
+<section id="main-content" class="relative min-h-screen flex items-center pt-20 overflow-hidden grain">
   <!-- starfield -->
   <div class="absolute inset-0" style="background-image: radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.5) 0%, transparent 100%), radial-gradient(1px 1px at 70% 15%, rgba(255,255,255,0.4) 0%, transparent 100%), radial-gradient(1.5px 1.5px at 85% 60%, rgba(255,255,255,0.5) 0%, transparent 100%), radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.3) 0%, transparent 100%), radial-gradient(1px 1px at 55% 45%, rgba(255,255,255,0.4) 0%, transparent 100%), radial-gradient(1.5px 1.5px at 10% 65%, rgba(255,255,255,0.4) 0%, transparent 100%), radial-gradient(1px 1px at 92% 35%, rgba(255,255,255,0.3) 0%, transparent 100%);"></div>
 
@@ -121,25 +218,74 @@ body{
     <circle r="7" fill="#E0632B" class="orbit-dot"/>
   </svg>
 
-  <div class="relative max-w-6xl mx-auto px-6 w-full">
-    <p class="font-mono text-xs tracking-[0.35em] text-rust uppercase mb-6">// Hard Science Fiction</p>
-    <h1 class="font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.05] text-ink max-w-4xl">
-      Survival is just <span class="italic text-rust">orbital mechanics</span><br> with worse odds.
-    </h1>
-    <p class="mt-8 text-dim text-lg max-w-xl leading-relaxed">
-      Andy Weir builds stories the way he built his career in software — one correct, defensible calculation at a time. The result: survival thrillers where the real antagonist is physics.
-    </p>
-    <div class="mt-10 flex flex-wrap items-center gap-4">
-      <a href="#missions" class="font-mono text-xs tracking-widest uppercase bg-rust text-void px-7 py-4 font-medium hover:bg-white transition-colors">Read Project Hail Mary</a>
-      <a href="#log" class="font-mono text-xs tracking-widest uppercase border border-line text-ink px-7 py-4 font-medium hover:border-rust transition-colors">View Mission Log</a>
+  <div class="relative max-w-6xl mx-auto px-6 w-full grid lg:grid-cols-12 gap-12 items-center">
+
+    <div class="lg:col-span-7" data-reveal>
+      <a href="#missions" class="inline-flex items-center gap-2 font-mono text-[11px] tracking-widest uppercase bg-panel border border-go/30 text-go px-4 py-2 mb-6 hover:border-go transition-colors">
+        <span class="w-1.5 h-1.5 rounded-full bg-go"></span> Project Hail Mary — Certified Fresh · $640M+ Worldwide
+      </a>
+      <p class="font-mono text-xs tracking-[0.35em] text-rust uppercase mb-6">// Hard Science Fiction</p>
+      <h1 class="font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.05] text-ink max-w-4xl">
+        Survival is just <span class="italic text-rust">orbital mechanics</span><br> with worse odds.
+      </h1>
+      <p class="mt-8 text-dim text-lg max-w-xl leading-relaxed">
+        Andy Weir builds stories the way he built his career in software — one correct, defensible calculation at a time. The result: survival thrillers where the real antagonist is physics.
+      </p>
+      <div class="mt-10 flex flex-wrap items-center gap-4">
+        <a href="https://www.amazon.com/Project-Hail-Mary-Andy-Weir-ebook/dp/B08FHBV4ZX" target="_blank" rel="noopener noreferrer" class="font-mono text-xs tracking-widest uppercase bg-rust text-void px-7 py-4 font-medium hover:bg-white transition-colors">Read Project Hail Mary</a>
+        <a href="#missions" class="font-mono text-xs tracking-widest uppercase border border-line text-ink px-7 py-4 font-medium hover:border-rust transition-colors">View Mission Log</a>
+      </div>
+
+      <!-- telemetry stat strip -->
+      <div class="mt-16 flex flex-wrap gap-x-10 gap-y-4 font-mono text-xs tracking-widest text-dim uppercase border-t border-line pt-6">
+        <span><span class="text-go">●</span> #1 NYT Bestseller</span>
+        <span><span class="text-go">●</span> 2 Films Released · 1 In Development</span>
+        <span><span class="text-go">●</span> Hugo Award Finalist</span>
+        <span><span class="text-go">●</span> 20+ Yrs Software Engineering Pre-Debut</span>
+      </div>
     </div>
 
-    <!-- telemetry stat strip -->
-    <div class="mt-16 flex flex-wrap gap-x-10 gap-y-4 font-mono text-xs tracking-widest text-dim uppercase border-t border-line pt-6">
-      <span><span class="text-go">●</span> #1 NYT Bestseller</span>
-      <span><span class="text-go">●</span> 3 Novels in Film Development/Release</span>
-      <span><span class="text-go">●</span> Hugo Award Finalist</span>
-      <span><span class="text-go">●</span> 20+ Yrs Software Engineering Pre-Debut</span>
+    <!-- Mission Patch (original design, not cover art) -->
+    <div class="lg:col-span-5 flex justify-center" data-reveal data-reveal-delay="150">
+      <div class="relative w-72 h-72 sm:w-80 sm:h-80">
+        <svg viewBox="0 0 300 300" class="w-full h-full drop-shadow-[0_0_40px_rgba(224,99,43,0.15)]">
+          <circle cx="150" cy="150" r="145" fill="#12161D" stroke="#232935" stroke-width="2"/>
+          <circle cx="150" cy="150" r="128" fill="none" stroke="#E0632B" stroke-width="1.5" stroke-dasharray="3 6"/>
+          <circle cx="150" cy="150" r="108" fill="none" stroke="#232935" stroke-width="1"/>
+          <ellipse cx="150" cy="150" rx="95" ry="38" fill="none" stroke="#35D399" stroke-width="1" opacity="0.5" transform="rotate(-18 150 150)"/>
+          <circle cx="150" cy="150" r="34" fill="#0A0D12" stroke="#E0632B" stroke-width="2"/>
+          <circle cx="150" cy="150" r="16" fill="#E0632B" opacity="0.9"/>
+          <circle cx="228" cy="112" r="5" fill="#ECEFF4"/>
+          <path id="patchCircleTop" d="M 50,150 A 100,100 0 0 1 250,150" fill="none"/>
+          <path id="patchCircleBottom" d="M 70,150 A 80,80 0 0 0 230,150" fill="none"/>
+          <text font-family="IBM Plex Mono, monospace" font-size="13" letter-spacing="4" fill="#ECEFF4" font-weight="600">
+            <textPath href="#patchCircleTop" startOffset="50%" text-anchor="middle">PROJECT HAIL MARY</textPath>
+          </text>
+          <text font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="3" fill="#8A93A3">
+            <textPath href="#patchCircleBottom" startOffset="50%" text-anchor="middle">TAU CETI RECONNAISSANCE</textPath>
+          </text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- scroll cue -->
+  <a href="#about" aria-label="Scroll to About section" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 font-mono text-[10px] tracking-widest text-faint uppercase hover:text-rust transition-colors">
+    <span>Scroll</span>
+    <i class="fa-solid fa-chevron-down animate-bounce"></i>
+  </a>
+</section>
+
+<!-- PRESS STRIP -->
+<section class="bg-panel border-t border-b border-line py-6 overflow-hidden">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-wrap items-center justify-center gap-x-12 gap-y-3 font-mono text-[11px] tracking-widest text-faint uppercase text-center">
+      <span class="text-dim">Coverage &amp; Recognition:</span>
+      <span>The New York Times</span>
+      <span>NPR</span>
+      <span>Wired</span>
+      <span>Entertainment Weekly</span>
+      <span>Rotten Tomatoes — Certified Fresh</span>
     </div>
   </div>
 </section>
@@ -148,7 +294,7 @@ body{
 <section id="about" class="py-28 bg-void border-t border-line relative overflow-hidden grain">
   <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-12 gap-14 items-start relative">
 
-    <div class="md:col-span-5">
+    <div class="md:col-span-5" data-reveal>
       <div class="relative">
         <div class="absolute -inset-3 border border-line"></div>
         <div class="relative overflow-hidden border border-line" style="filter:grayscale(1) contrast(1.05);">
@@ -161,7 +307,7 @@ body{
       </div>
     </div>
 
-    <div class="md:col-span-7">
+    <div class="md:col-span-7" data-reveal data-reveal-delay="150">
       <p class="font-mono text-xs tracking-[0.3em] text-rust uppercase mb-3">Crew Manifest</p>
       <h2 class="font-display text-4xl text-ink mb-8">About the Author</h2>
 
@@ -204,7 +350,7 @@ body{
       <p class="text-dim text-sm max-w-xs font-mono">Chronological, because in orbital mechanics — and in a career — sequence is the whole plot.</p>
     </div>
 
-    <div class="mission-rail pl-12 space-y-14">
+    <div class="mission-rail pl-12 space-y-14" data-reveal>
 
       <!-- MSN 01 -->
       <div class="relative">
@@ -215,7 +361,7 @@ body{
         </div>
         <h3 class="font-display text-3xl text-ink mb-2">The Martian</h3>
         <p class="text-dim leading-relaxed max-w-2xl mb-4">A botanist stranded alone on Mars has to out-engineer a planet that is actively trying to kill him. Originally released free, chapter by chapter, on Weir's own site — readers pushed it onto bestseller lists before a single publisher touched it.</p>
-        <a href="https://www.amazon.com/Martian-Novel-Andy-Weir-ebook/dp/B00EMXBDMA" target="_blank" class="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-rust hover:text-white transition-colors">View on Amazon <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+        <a href="https://www.amazon.com/Martian-Novel-Andy-Weir-ebook/dp/B00EMXBDMA" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-rust hover:text-white transition-colors">View on Amazon <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
       </div>
 
       <!-- MSN 02 -->
@@ -227,7 +373,7 @@ body{
         </div>
         <h3 class="font-display text-3xl text-ink mb-2">Artemis</h3>
         <p class="text-dim leading-relaxed max-w-2xl mb-4">A heist thriller set in Earth's only lunar city, following a porter-turned-smuggler whose small-time con spirals into a fight over who actually controls the Moon.</p>
-        <a href="https://www.amazon.com/Artemis-Novel-Andy-Weir-ebook/dp/B06Y55SB48" target="_blank" class="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-rust hover:text-white transition-colors">View on Amazon <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+        <a href="https://www.amazon.com/Artemis-Novel-Andy-Weir-ebook/dp/B06Y55SB48" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-rust hover:text-white transition-colors">View on Amazon <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
       </div>
 
       <!-- MSN 03 -->
@@ -239,7 +385,7 @@ body{
         </div>
         <h3 class="font-display text-3xl text-ink mb-2">Project Hail Mary</h3>
         <p class="text-dim leading-relaxed max-w-2xl mb-4">A lone astronaut wakes up with amnesia aboard a spacecraft, the last hope for a dying Earth — and has to reconstruct both his memory and a plan to save humanity from scratch.</p>
-        <a href="https://www.amazon.com/Project-Hail-Mary-Andy-Weir-ebook/dp/B08FHBV4ZX" target="_blank" class="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-rust hover:text-white transition-colors">View on Amazon <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+        <a href="https://www.amazon.com/Project-Hail-Mary-Andy-Weir-ebook/dp/B08FHBV4ZX" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-rust hover:text-white transition-colors">View on Amazon <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
       </div>
 
       <!-- MSN 04 -->
@@ -251,7 +397,7 @@ body{
         </div>
         <h3 class="font-display text-3xl text-ink mb-2">Cheshire Crossing</h3>
         <p class="text-dim leading-relaxed max-w-2xl mb-4">Alice, Wendy, and Dorothy, years after their respective trips down the rabbit hole, off to Neverland, and over the rainbow, cross paths at a school for girls who've seen too much of the impossible.</p>
-        <a href="https://www.amazon.com/Cheshire-Crossing-Andy-Weir-ebook/dp/B07JL49RW6" target="_blank" class="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-rust hover:text-white transition-colors">View on Amazon <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
+        <a href="https://www.amazon.com/Cheshire-Crossing-Andy-Weir-ebook/dp/B07JL49RW6" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-rust hover:text-white transition-colors">View on Amazon <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i></a>
       </div>
 
     </div>
@@ -266,61 +412,61 @@ body{
         <p class="font-mono text-xs tracking-[0.3em] text-rust uppercase mb-3">Additional Payloads</p>
         <h2 class="font-display text-4xl text-ink">Editions &amp; Translations</h2>
       </div>
-      <a href="https://www.amazon.com/stores/author/B00G0WYW92/allbooks" target="_blank" class="font-mono text-xs tracking-widest uppercase border border-line text-ink px-6 py-3 hover:border-rust transition-colors whitespace-nowrap">Browse All 75 Titles <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i></a>
+      <a href="https://www.amazon.com/stores/author/B00G0WYW92/allbooks" target="_blank" rel="noopener noreferrer" class="font-mono text-xs tracking-widest uppercase border border-line text-ink px-6 py-3 hover:border-rust transition-colors whitespace-nowrap">Browse All 75 Titles <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[10px]"></i></a>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" data-reveal>
 
-      <a href="https://www.amazon.com/Martian-Classroom-Novel-Andy-Weir-ebook/dp/B072LBZJF1" target="_blank" class="card-hover block bg-panel border border-line p-6">
+      <a href="https://www.amazon.com/Martian-Classroom-Novel-Andy-Weir-ebook/dp/B072LBZJF1" target="_blank" rel="noopener noreferrer" class="card-hover block bg-panel border border-line p-6">
         <span class="font-mono text-[10px] tracking-widest text-go uppercase border border-go/30 px-2 py-0.5">EN · Classroom Ed.</span>
         <h3 class="font-display text-xl text-ink mt-4 mb-1">The Martian</h3>
         <p class="text-faint text-xs font-mono mb-6">Classroom Edition</p>
         <span class="font-mono text-[10px] tracking-widest text-rust uppercase">View on Amazon →</span>
       </a>
 
-      <a href="https://www.amazon.com/Randomize-Forward-collection-Andy-Weir-ebook/dp/B07VDJBKNJ" target="_blank" class="card-hover block bg-panel border border-line p-6">
+      <a href="https://www.amazon.com/Randomize-Forward-collection-Andy-Weir-ebook/dp/B07VDJBKNJ" target="_blank" rel="noopener noreferrer" class="card-hover block bg-panel border border-line p-6">
         <span class="font-mono text-[10px] tracking-widest text-dim uppercase border border-line px-2 py-0.5">EN · Short Story</span>
         <h3 class="font-display text-xl text-ink mt-4 mb-1">Randomize</h3>
         <p class="text-faint text-xs font-mono mb-6">from the Forward collection</p>
         <span class="font-mono text-[10px] tracking-widest text-rust uppercase">View on Amazon →</span>
       </a>
 
-      <a href="https://www.amazon.com/El-marciano-Spanish-Andy-Weir-ebook/dp/B00OXYQR38" target="_blank" class="card-hover block bg-panel border border-line p-6">
+      <a href="https://www.amazon.com/El-marciano-Spanish-Andy-Weir-ebook/dp/B00OXYQR38" target="_blank" rel="noopener noreferrer" class="card-hover block bg-panel border border-line p-6">
         <span class="font-mono text-[10px] tracking-widest text-dim uppercase border border-line px-2 py-0.5">ES · Translation</span>
         <h3 class="font-display text-xl text-ink mt-4 mb-1">El Marciano</h3>
         <p class="text-faint text-xs font-mono mb-6">The Martian — Spanish Edition</p>
         <span class="font-mono text-[10px] tracking-widest text-rust uppercase">View on Amazon →</span>
       </a>
 
-      <a href="https://www.amazon.com/Artemisa-Spanish-Andy-Weir-ebook/dp/B076LCSGJW" target="_blank" class="card-hover block bg-panel border border-line p-6">
+      <a href="https://www.amazon.com/Artemisa-Spanish-Andy-Weir-ebook/dp/B076LCSGJW" target="_blank" rel="noopener noreferrer" class="card-hover block bg-panel border border-line p-6">
         <span class="font-mono text-[10px] tracking-widest text-dim uppercase border border-line px-2 py-0.5">ES · Translation</span>
         <h3 class="font-display text-xl text-ink mt-4 mb-1">Artemisa</h3>
         <p class="text-faint text-xs font-mono mb-6">Artemis — Spanish Edition</p>
         <span class="font-mono text-[10px] tracking-widest text-rust uppercase">View on Amazon →</span>
       </a>
 
-      <a href="https://www.amazon.com/Proyecto-Hail-Mary-Spanish-Andy-ebook/dp/B08ZWCJ5XJ" target="_blank" class="card-hover block bg-panel border border-line p-6">
+      <a href="https://www.amazon.com/Proyecto-Hail-Mary-Spanish-Andy-ebook/dp/B08ZWCJ5XJ" target="_blank" rel="noopener noreferrer" class="card-hover block bg-panel border border-line p-6">
         <span class="font-mono text-[10px] tracking-widest text-dim uppercase border border-line px-2 py-0.5">ES · Translation</span>
         <h3 class="font-display text-xl text-ink mt-4 mb-1">Proyecto Hail Mary</h3>
         <p class="text-faint text-xs font-mono mb-6">Project Hail Mary — Spanish Edition</p>
         <span class="font-mono text-[10px] tracking-widest text-rust uppercase">View on Amazon →</span>
       </a>
 
-      <a href="https://www.amazon.com/Proyecto-Hail-edici%C3%B3n-ilustrada-Spanish-ebook/dp/B0GHPVZ41Y" target="_blank" class="card-hover block bg-panel border border-line p-6">
+      <a href="https://www.amazon.com/Proyecto-Hail-edici%C3%B3n-ilustrada-Spanish-ebook/dp/B0GHPVZ41Y" target="_blank" rel="noopener noreferrer" class="card-hover block bg-panel border border-line p-6">
         <span class="font-mono text-[10px] tracking-widest text-go uppercase border border-go/30 px-2 py-0.5">ES · Illustrated</span>
         <h3 class="font-display text-xl text-ink mt-4 mb-1">Proyecto Hail Mary</h3>
         <p class="text-faint text-xs font-mono mb-6">Illustrated Spanish Edition</p>
         <span class="font-mono text-[10px] tracking-widest text-rust uppercase">View on Amazon →</span>
       </a>
 
-      <a href="https://www.amazon.com/Project-Hail-Mary-Italian-Andy-ebook/dp/B0BS2244QP" target="_blank" class="card-hover block bg-panel border border-line p-6">
+      <a href="https://www.amazon.com/Project-Hail-Mary-Italian-Andy-ebook/dp/B0BS2244QP" target="_blank" rel="noopener noreferrer" class="card-hover block bg-panel border border-line p-6">
         <span class="font-mono text-[10px] tracking-widest text-dim uppercase border border-line px-2 py-0.5">IT · Translation</span>
         <h3 class="font-display text-xl text-ink mt-4 mb-1">Project Hail Mary</h3>
         <p class="text-faint text-xs font-mono mb-6">Italian Edition</p>
         <span class="font-mono text-[10px] tracking-widest text-rust uppercase">View on Amazon →</span>
       </a>
 
-      <a href="https://www.amazon.com/Astronaut-Roman-German-Andy-Weir-ebook/dp/B08MCCKT1Z" target="_blank" class="card-hover block bg-panel border border-line p-6">
+      <a href="https://www.amazon.com/Astronaut-Roman-German-Andy-Weir-ebook/dp/B08MCCKT1Z" target="_blank" rel="noopener noreferrer" class="card-hover block bg-panel border border-line p-6">
         <span class="font-mono text-[10px] tracking-widest text-dim uppercase border border-line px-2 py-0.5">DE · Translation</span>
         <h3 class="font-display text-xl text-ink mt-4 mb-1">Der Astronaut</h3>
         <p class="text-faint text-xs font-mono mb-6">The Martian — German Edition</p>
@@ -338,10 +484,11 @@ body{
     <p class="font-mono text-xs tracking-[0.3em] text-rust uppercase mb-4">Transmission Signup</p>
     <h2 class="font-display text-3xl sm:text-4xl text-ink mb-6">Get notified when the next mission launches.</h2>
     <p class="text-dim mb-10">No spam, no filler — just word the moment a new book, cover reveal, or film update goes live.</p>
-    <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-      <input type="email" placeholder="you@email.com" class="flex-1 bg-void border border-line focus:border-rust outline-none px-5 py-4 text-sm text-ink placeholder:text-faint">
+    <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+      <input type="email" id="newsletter-email" required placeholder="you@email.com" class="flex-1 bg-void border border-line focus:border-rust outline-none px-5 py-4 text-sm text-ink placeholder:text-faint">
       <button type="submit" class="font-mono text-xs tracking-widest uppercase bg-rust text-void px-6 py-4 font-medium hover:bg-white transition-colors whitespace-nowrap">Subscribe</button>
     </form>
+    <p id="newsletter-note" class="mt-4 text-xs font-mono text-faint">This form isn't connected to an email list yet — see the note below before going live.</p>
   </div>
 </section>
 
@@ -352,17 +499,81 @@ body{
     <div class="flex gap-6 font-mono text-xs tracking-widest text-faint uppercase items-center">
       <a href="#about" class="hover:text-ink transition-colors">About</a>
       <a href="#missions" class="hover:text-ink transition-colors">Missions</a>
-      <a href="#log" class="hover:text-ink transition-colors">Log</a>
+      <a href="#log" class="hover:text-ink transition-colors">Updates</a>
       <span class="flex items-center gap-4 border-l border-line pl-6 text-sm">
-        <a href="https://x.com/andyweirauthor" target="_blank" aria-label="Andy Weir on X" class="hover:text-rust transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
-        <a href="https://www.facebook.com/AndyWeirAuthor/" target="_blank" aria-label="Andy Weir on Facebook" class="hover:text-rust transition-colors"><i class="fa-brands fa-facebook"></i></a>
-        <a href="https://www.goodreads.com/author/show/6540057.Andy_Weir" target="_blank" aria-label="Andy Weir on Goodreads" class="hover:text-rust transition-colors"><i class="fa-brands fa-goodreads"></i></a>
-        <a href="http://galactanet.com/" target="_blank" aria-label="Andy Weir's personal site" class="hover:text-rust transition-colors"><i class="fa-solid fa-globe"></i></a>
+        <a href="https://x.com/andyweirauthor" target="_blank" rel="noopener noreferrer" aria-label="Andy Weir on X" class="hover:text-rust transition-colors"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="https://www.facebook.com/AndyWeirAuthor/" target="_blank" rel="noopener noreferrer" aria-label="Andy Weir on Facebook" class="hover:text-rust transition-colors"><i class="fa-brands fa-facebook"></i></a>
+        <a href="https://www.goodreads.com/author/show/6540057.Andy_Weir" target="_blank" rel="noopener noreferrer" aria-label="Andy Weir on Goodreads" class="hover:text-rust transition-colors"><i class="fa-brands fa-goodreads"></i></a>
+        <a href="http://galactanet.com/" target="_blank" rel="noopener noreferrer" aria-label="Andy Weir's personal site" class="hover:text-rust transition-colors"><i class="fa-solid fa-globe"></i></a>
       </span>
     </div>
     <span class="font-mono text-[11px] text-faint">© 2026 — Fan-built author showcase</span>
   </div>
 </footer>
+
+<!-- Back to top -->
+<button id="back-to-top" aria-label="Back to top">
+  <i class="fa-solid fa-arrow-up"></i>
+</button>
+
+<script>
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  menuBtn.addEventListener('click', () => {
+    const isHidden = mobileMenu.classList.contains('hidden');
+    mobileMenu.classList.toggle('hidden');
+    menuBtn.innerHTML = isHidden ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-bars"></i>';
+  });
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+    });
+  });
+
+  // Newsletter form — placeholder until connected to a real email service (e.g. Formspree/Mailchimp/ConvertKit)
+  const newsletterForm = document.getElementById('newsletter-form');
+  const newsletterNote = document.getElementById('newsletter-note');
+  newsletterForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    newsletterNote.textContent = "This signup form isn't connected to an email service yet, so nothing was actually sent — hook it up to Formspree/Mailchimp/ConvertKit before this goes live.";
+    newsletterNote.classList.add('text-rust');
+  });
+
+  // Scroll progress bar
+  const progressBar = document.getElementById('scroll-progress');
+  const backToTop = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = pct + '%';
+    backToTop.classList.toggle('visible', scrollTop > 500);
+  }, { passive: true });
+
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Scroll-reveal via IntersectionObserver
+  const revealEls = document.querySelectorAll('[data-reveal]');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const delay = entry.target.getAttribute('data-reveal-delay');
+          if (delay) entry.target.style.transitionDelay = delay + 'ms';
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => observer.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('is-visible'));
+  }
+</script>
 
 </body>
 </html>
