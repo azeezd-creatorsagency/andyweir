@@ -3,791 +3,898 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Andy Weir — Mission Control | Hard Science Fiction Author</title>
-<meta name="description" content="Official mission dashboard for Andy Weir, #1 New York Times bestselling author of The Martian, Project Hail Mary, and Artemis.">
-
+<title>Andy Weir — #1 New York Times Bestselling Author</title>
+<meta name="description" content="Andy Weir, #1 New York Times bestselling author of The Martian, Artemis, and Project Hail Mary. Explore his books and read the science behind the stories.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
 <style>
   :root{
-    --nasa-orange:#FF6B35;
-    --space-black:#0B0D17;
-    --cyan:#00F0FF;
-    --mars-red:#C1440E;
-    --lab-white:#F0F4F8;
-    --circuit-green:#00C851;
-    --panel:#11141f;
-    --panel-line:rgba(0,240,255,0.18);
+    --bg:#090c12;
+    --bg-1:#0d121b;
+    --bg-2:#131a26;
+    --card:#151d2b;
+    --line:rgba(237,238,242,0.09);
+    --line-soft:rgba(237,238,242,0.05);
+    --text:#edeef2;
+    --text-muted:#8f97a8;
+    --text-dim:#5d6577;
+    --rust:#c1662f;
+    --rust-bright:#e2854e;
+    --ice:#6fb3d9;
+    --ice-dim:#3f5f72;
+    --serif:'Source Serif 4', serif;
+    --display:'Space Grotesk', sans-serif;
+    --mono:'IBM Plex Mono', monospace;
   }
-  *{box-sizing:border-box;}
+  *{margin:0;padding:0;box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
-    background:var(--space-black);
-    color:var(--lab-white);
-    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--serif);
+    font-size:17px;
+    line-height:1.7;
     overflow-x:hidden;
-    position:relative;
   }
-  h1,h2,h3,.mono-head{font-family:'Orbitron',sans-serif;}
-  .rajdhani{font-family:'Rajdhani',sans-serif;}
-  .mono{font-family:'Roboto Mono',monospace;}
-
-  ::selection{background:var(--nasa-orange);color:var(--space-black);}
-
-  /* ===== Scrollbar ===== */
-  ::-webkit-scrollbar{width:10px;}
-  ::-webkit-scrollbar-track{background:var(--space-black);}
-  ::-webkit-scrollbar-thumb{background:linear-gradient(var(--cyan),var(--nasa-orange));border-radius:6px;}
-
-  /* ===== Starfield ===== */
-  #starfield{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 50% -10%, #131a2e 0%, #0B0D17 55%, #05060b 100%);}
-  .star{position:absolute;background:#fff;border-radius:50%;opacity:.8;animation:twinkle linear infinite;}
-  @keyframes twinkle{0%,100%{opacity:.15;}50%{opacity:1;}}
-  @keyframes drift{from{transform:translateY(0);}to{transform:translateY(-2000px);}}
-
-  /* ===== Grid / blueprint texture ===== */
-  .blueprint-grid{
-    background-image:
-      linear-gradient(rgba(0,240,255,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,240,255,0.06) 1px, transparent 1px);
-    background-size:42px 42px;
-  }
-  .hex-bg{
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath fill='none' stroke='%2300F0FF' stroke-opacity='0.06' d='M28 0 56 16 56 50 28 66 0 50 0 16z'/%3E%3C/svg%3E");
-    background-size:56px 100px;
-  }
-
-  /* ===== Scanline overlay ===== */
-  .scanlines::before{
-    content:"";position:absolute;inset:0;pointer-events:none;
-    background:repeating-linear-gradient(to bottom, rgba(0,240,255,0.035) 0px, rgba(0,240,255,0.035) 1px, transparent 2px, transparent 4px);
-    mix-blend-mode:overlay;
-  }
-
-  /* ===== Nav ===== */
-  #mainnav{
-    position:fixed;top:0;left:0;right:0;z-index:50;
-    padding:18px 0;
-    transition:all .35s ease;
-    border-bottom:1px solid transparent;
-  }
-  #mainnav.scrolled{
-    background:rgba(11,13,23,0.92);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--panel-line);
-    padding:12px 0;
-  }
-  .nav-link{
-    position:relative;
-    font-family:'Rajdhani',sans-serif;
-    font-weight:600;
-    letter-spacing:.12em;
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.18em;
     text-transform:uppercase;
-    font-size:.85rem;
-    color:#c8d3de;
-    transition:color .25s ease;
+    color:var(--rust-bright);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
   }
-  .nav-link::after{
-    content:"";position:absolute;left:0;bottom:-6px;width:0;height:2px;
-    background:var(--nasa-orange);transition:width .25s ease;
-  }
-  .nav-link:hover{color:var(--cyan);}
-  .nav-link:hover::after{width:100%;}
-  .logo-mark{font-family:'Orbitron',sans-serif;font-weight:900;letter-spacing:.08em;}
-  .logo-mark span{color:var(--nasa-orange);}
-
-  /* ===== Buttons ===== */
-  .btn-primary{
-    font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-    background:var(--nasa-orange);color:#0B0D17;
-    padding:16px 38px;border-radius:2px;position:relative;overflow:hidden;
-    box-shadow:0 0 0 1px rgba(255,107,53,.5), 0 0 24px rgba(255,107,53,.35);
-    transition:transform .2s ease, box-shadow .2s ease;
+  .eyebrow::before{
+    content:'';
+    width:22px;height:1px;
+    background:var(--rust-bright);
     display:inline-block;
   }
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 0 1px var(--nasa-orange), 0 0 40px rgba(255,107,53,.6);}
-  .btn-primary::before{
-    content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;
-    background:linear-gradient(120deg, transparent, rgba(255,255,255,.55), transparent);
-    transform:skewX(-20deg);transition:left .6s ease;
+  h1,h2,h3{font-family:var(--display);font-weight:600;letter-spacing:-0.01em;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  section{position:relative;}
+
+  /* ===== Trajectory Rail (signature element) ===== */
+  .rail{
+    position:fixed;
+    left:40px;
+    top:0;
+    bottom:0;
+    width:1px;
+    z-index:40;
+    display:none;
   }
-  .btn-primary:hover::before{left:140%;}
-
-  .btn-ghost{
-    font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-    border:1px solid var(--cyan);color:var(--cyan);padding:15px 34px;border-radius:2px;
-    transition:all .25s ease;display:inline-block;
+  @media(min-width:1100px){ .rail{display:block;} }
+  .rail-line{
+    position:absolute;
+    left:0;top:0;bottom:0;width:1px;
+    background:var(--line);
   }
-  .btn-ghost:hover{background:rgba(0,240,255,.1);box-shadow:0 0 20px rgba(0,240,255,.35);}
-
-  /* ===== Panels ===== */
-  .panel{
-    background:linear-gradient(180deg, rgba(20,24,38,.9), rgba(11,13,23,.9));
-    border:1px solid var(--panel-line);
-    border-radius:4px;
-    position:relative;
+  .rail-progress{
+    position:absolute;left:0;top:0;width:1px;height:0%;
+    background:linear-gradient(var(--rust-bright), var(--ice));
+    transition:height .15s linear;
   }
-  .panel::before{
-    content:"";position:absolute;top:0;left:0;width:14px;height:14px;
-    border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);
+  .rail-marks{position:absolute;left:0;top:0;height:100%;width:1px;}
+  .rail-mark{
+    position:absolute;left:0;
+    transform:translate(-50%,-50%);
+    width:9px;height:9px;
+    border-radius:50%;
+    background:var(--bg-2);
+    border:1px solid var(--text-dim);
+    cursor:pointer;
+    transition:.25s;
   }
-  .panel::after{
-    content:"";position:absolute;bottom:0;right:0;width:14px;height:14px;
-    border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan);
+  .rail-mark.active{
+    background:var(--rust-bright);
+    border-color:var(--rust-bright);
+    box-shadow:0 0 0 4px rgba(226,133,78,0.15);
   }
-
-  .badge{
-    font-family:'Roboto Mono',monospace;font-size:.7rem;letter-spacing:.08em;
-    border:1px solid var(--circuit-green);color:var(--circuit-green);
-    padding:5px 12px;border-radius:2px;display:inline-flex;align-items:center;gap:8px;
+  .rail-mark span{
+    position:absolute;
+    left:20px;top:50%;
+    transform:translateY(-50%);
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+    white-space:nowrap;
+    opacity:0;
+    transition:opacity .2s;
   }
-  .badge .dot{width:6px;height:6px;background:var(--circuit-green);border-radius:50%;box-shadow:0 0 8px var(--circuit-green);animation:pulse 1.6s ease-in-out infinite;}
-  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+  .rail-mark:hover span,.rail-mark.active span{opacity:1;color:var(--text-muted);}
 
-  /* ===== HUD corner ticks on section titles ===== */
-  .hud-title{position:relative;display:inline-block;padding:0 6px;}
-  .hud-title::before,.hud-title::after{
-    content:"";position:absolute;top:50%;width:26px;height:1px;background:var(--nasa-orange);
+  /* ===== Nav ===== */
+  .nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    padding:20px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+    backdrop-filter:blur(14px);
+    background:linear-gradient(rgba(9,12,18,.85),rgba(9,12,18,.55));
+    border-bottom:1px solid transparent;
+    transition:border-color .3s, background .3s;
   }
-  .hud-title::before{right:100%;}
-  .hud-title::after{left:100%;}
+  .nav.scrolled{border-color:var(--line);}
+  .nav-logo{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:17px;
+    letter-spacing:.02em;
+  }
+  .nav-logo small{
+    display:block;
+    font-family:var(--mono);
+    font-size:9px;
+    letter-spacing:.2em;
+    color:var(--rust-bright);
+    font-weight:400;
+    margin-top:2px;
+  }
+  .nav-links{display:none;gap:34px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--text-muted);}
+  @media(min-width:860px){.nav-links{display:flex;}}
+  .nav-links a:hover{color:var(--text);}
+  .nav-cta{
+    font-family:var(--mono);font-size:12px;letter-spacing:.06em;
+    padding:9px 18px;border:1px solid var(--line);border-radius:3px;
+    color:var(--text);white-space:nowrap;
+  }
+  .nav-cta:hover{border-color:var(--rust-bright);color:var(--rust-bright);}
 
-  /* ===== Hero slideshow ===== */
-  .hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 1.6s ease;}
-  .hero-slide.active{opacity:1;}
-  .hero-slide .surface{position:absolute;inset:0;}
+  /* ===== Buttons ===== */
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:13px;letter-spacing:.04em;
+    padding:15px 26px;border-radius:3px;
+    cursor:pointer;white-space:nowrap;
+    transition:transform .2s, box-shadow .2s, background .2s, color .2s, border-color .2s;
+  }
+  .btn-primary{background:var(--rust);color:#fff;border:1px solid var(--rust);}
+  .btn-primary:hover{background:var(--rust-bright);border-color:var(--rust-bright);transform:translateY(-2px);box-shadow:0 12px 30px -10px rgba(226,133,78,.5);}
+  .btn-ghost{background:transparent;color:var(--text);border:1px solid rgba(237,238,242,0.25);}
+  .btn-ghost:hover{border-color:var(--text);transform:translateY(-2px);}
+  .btn-ice{background:transparent;color:var(--ice);border:1px solid var(--ice-dim);}
+  .btn-ice:hover{border-color:var(--ice);background:rgba(111,179,217,.08);}
+  .btn small{font-family:var(--mono);opacity:.55;font-size:11px;}
 
-  .mars-surface{background:radial-gradient(circle at 30% 40%, #7a2b12 0%, #3d1408 45%, #0B0D17 85%);}
-  .moon-surface{background:radial-gradient(circle at 70% 30%, #2b2f3d 0%, #14161f 45%, #0B0D17 85%);}
-  .stars-surface{background:radial-gradient(circle at 50% 20%, #0f1730 0%, #0B0D17 60%);}
+  /* ===== HERO ===== */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    padding-top:120px;
+    overflow:hidden;
+  }
+  .hero-art{
+    position:absolute;inset:0;z-index:0;
+  }
+  .hero-art svg{width:100%;height:100%;display:block;}
+  .hero-scrim{
+    position:absolute;inset:0;z-index:1;
+    background:
+      linear-gradient(180deg, rgba(9,12,18,0.15) 0%, rgba(9,12,18,0.35) 45%, rgba(9,12,18,0.96) 92%),
+      linear-gradient(90deg, rgba(9,12,18,0.75) 0%, rgba(9,12,18,0.15) 45%, rgba(9,12,18,0.35) 100%);
+  }
+  .hero-inner{
+    position:relative;z-index:2;
+    width:100%;
+    padding-bottom:9vh;
+  }
+  .hero-content{max-width:680px;}
+  .hero h1{
+    font-size:clamp(48px,8vw,92px);
+    line-height:0.98;
+    margin-bottom:20px;
+    color:#fff;
+  }
+  .hero-tagline{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:clamp(19px,2.4vw,24px);
+    color:var(--ice);
+    margin-bottom:22px;
+    max-width:560px;
+  }
+  .hero-intro{
+    color:var(--text-muted);
+    max-width:520px;
+    margin-bottom:38px;
+    font-size:16px;
+  }
+  .hero-ctas{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:46px;}
+  .hero-stats{
+    display:flex;gap:36px;flex-wrap:wrap;
+    padding-top:28px;
+    border-top:1px solid rgba(237,238,242,0.12);
+    max-width:600px;
+  }
+  .hero-stat b{
+    display:block;font-family:var(--display);font-size:22px;color:#fff;
+  }
+  .hero-stat span{
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);
+  }
+  .scroll-cue{
+    position:absolute;bottom:28px;right:32px;z-index:2;
+    font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--text-dim);
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+  }
+  .scroll-cue .line{width:1px;height:38px;background:linear-gradient(var(--text-dim),transparent);animation:pulse 2.4s infinite;}
+  @keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
 
-  .crater{position:absolute;border-radius:50%;box-shadow:inset -6px -6px 14px rgba(0,0,0,.6), inset 4px 4px 10px rgba(255,140,90,.15);background:rgba(0,0,0,.25);}
-
-  /* ===== HUD reticle ===== */
-  .reticle{position:absolute;border:1px solid rgba(0,240,255,.5);border-radius:50%;}
-  .reticle::before,.reticle::after{content:"";position:absolute;background:rgba(0,240,255,.6);}
-  .reticle::before{top:50%;left:-14px;width:10px;height:1px;}
-  .reticle::after{top:-14px;left:50%;width:1px;height:10px;}
-
-  /* ===== Section reveal ===== */
-  .reveal{opacity:0;transform:translateY(36px);transition:opacity .8s ease, transform .8s ease;}
+  /* ===== Reveal on scroll ===== */
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease, transform .8s ease;}
   .reveal.in{opacity:1;transform:translateY(0);}
 
-  /* ===== Card ===== */
+  /* ===== Section spacing / heads ===== */
+  .section{padding:130px 0;}
+  .section-head{max-width:640px;margin-bottom:64px;}
+  .section-head h2{font-size:clamp(30px,4vw,44px);}
+  .section-head p{color:var(--text-muted);margin-top:18px;font-size:16.5px;}
+  .divider{height:1px;background:var(--line);margin:0;}
+
+  /* ===== About ===== */
+  .about-grid{
+    display:grid;grid-template-columns:280px 1fr;gap:70px;align-items:start;
+  }
+  @media(max-width:760px){.about-grid{grid-template-columns:1fr;}}
+  .about-photo{
+    position:relative;border-radius:4px;overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .about-photo img{width:100%;filter:grayscale(.15) contrast(1.05);}
+  .about-photo-cap{
+    font-family:var(--mono);font-size:10px;color:var(--text-dim);letter-spacing:.06em;
+    margin-top:10px;
+  }
+  .about-copy p{color:var(--text-muted);margin-bottom:20px;font-size:16.5px;}
+  .about-copy p strong{color:var(--text);font-weight:600;}
+  .about-quote{
+    font-family:var(--serif);font-style:italic;font-size:22px;color:var(--text);
+    border-left:2px solid var(--rust);padding-left:24px;margin:36px 0;line-height:1.5;
+  }
+  .about-facts{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:38px;
+  }
+  .fact{
+    border:1px solid var(--line);padding:18px 20px;border-radius:3px;background:var(--bg-1);
+  }
+  .fact b{display:block;font-family:var(--display);font-size:15px;margin-bottom:4px;}
+  .fact span{font-family:var(--mono);font-size:10.5px;color:var(--text-dim);letter-spacing:.06em;text-transform:uppercase;}
+
+  /* ===== Books ===== */
+  .books{background:var(--bg-1);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .book-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:2px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  @media(max-width:820px){.book-grid{grid-template-columns:1fr;}}
   .book-card{
-    background:linear-gradient(180deg, rgba(20,24,38,.95), rgba(9,11,19,.98));
-    border:1px solid var(--panel-line);
-    transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+    background:var(--bg-1);
+    padding:44px;
+    display:flex;gap:28px;
+    transition:background .25s;
+  }
+  .book-card:hover{background:var(--card);}
+  @media(max-width:560px){.book-card{flex-direction:column;padding:32px 26px;}}
+  .book-cover{
+    flex:0 0 140px;
+    position:relative;
+  }
+  .book-cover img{
+    width:140px;border-radius:2px;
+    box-shadow:0 24px 50px -18px rgba(0,0,0,.7);
+    transition:transform .4s ease;
+  }
+  .book-card:hover .book-cover img{transform:translateY(-6px);}
+  .book-year{
+    font-family:var(--mono);font-size:10px;color:var(--text-dim);letter-spacing:.1em;
+    margin-top:12px;
+  }
+  .book-body{flex:1;min-width:0;}
+  .book-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+  .tag{
+    font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+    padding:4px 9px;border:1px solid var(--line);border-radius:20px;color:var(--text-muted);
+  }
+  .book-body h3{font-size:23px;margin-bottom:12px;}
+  .book-desc{color:var(--text-muted);font-size:15.2px;margin-bottom:10px;}
+  .book-desc-more{
+    color:var(--text-muted);font-size:15.2px;
+    max-height:0;overflow:hidden;opacity:0;
+    transition:max-height .4s ease, opacity .4s ease, margin .4s ease;
+  }
+  .book-desc-more.open{max-height:220px;opacity:1;margin-bottom:16px;}
+  .book-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;}
+  .learn-more{
+    font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:var(--ice);
+    display:inline-flex;align-items:center;gap:6px;cursor:pointer;background:none;border:none;padding:0;
+  }
+  .learn-more i{transition:transform .3s;font-size:10px;}
+  .learn-more.open i{transform:rotate(180deg);}
+  .buy-btn{
+    font-family:var(--mono);font-size:12px;letter-spacing:.04em;
+    padding:11px 18px;border-radius:3px;background:var(--rust);color:#fff;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .buy-btn:hover{background:var(--rust-bright);}
+
+  /* ===== Amazon CTA ===== */
+  .amazon-cta{overflow:hidden;}
+  .amazon-panel{
+    border:1px solid var(--line);border-radius:6px;
+    background:radial-gradient(120% 140% at 15% 0%, rgba(193,102,47,0.14), transparent 55%), var(--bg-2);
+    padding:64px;
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:50px;align-items:center;
+  }
+  @media(max-width:820px){.amazon-panel{grid-template-columns:1fr;padding:40px 28px;}}
+  .amazon-panel h2{font-size:clamp(28px,3.6vw,38px);margin-bottom:18px;}
+  .amazon-panel p{color:var(--text-muted);margin-bottom:30px;max-width:460px;}
+  .amazon-points{list-style:none;margin-bottom:34px;}
+  .amazon-points li{
+    font-size:15px;color:var(--text-muted);padding:10px 0;border-top:1px solid var(--line-soft);
+    display:flex;gap:12px;
+  }
+  .amazon-points li:first-child{border-top:none;}
+  .amazon-points i{color:var(--rust-bright);margin-top:4px;}
+  .amazon-visual{
+    border:1px solid var(--line);border-radius:6px;padding:30px;background:var(--bg-1);
+    font-family:var(--mono);
+  }
+  .av-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text-dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px;}
+  .av-title{font-family:var(--display);font-size:20px;color:#fff;margin-bottom:6px;}
+  .av-sub{font-size:12px;color:var(--text-muted);margin-bottom:22px;}
+  .av-bar{height:6px;border-radius:4px;background:var(--bg-2);overflow:hidden;margin-bottom:8px;border:1px solid var(--line);}
+  .av-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--rust),var(--rust-bright));}
+  .av-label{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text-dim);margin-bottom:20px;}
+
+  /* ===== Adaptations ===== */
+  .adapt-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:26px;}
+  @media(max-width:760px){.adapt-grid{grid-template-columns:1fr;}}
+  .adapt-card{
+    border:1px solid var(--line);border-radius:6px;padding:34px;background:var(--bg-1);
     position:relative;overflow:hidden;
   }
-  .book-card:hover{transform:translateY(-8px);border-color:var(--nasa-orange);box-shadow:0 20px 50px rgba(0,0,0,.5), 0 0 30px rgba(255,107,53,.25);}
-  .book-card .scan-hover{position:absolute;inset:0;background:linear-gradient(180deg, transparent, rgba(0,240,255,.08), transparent);transform:translateY(-100%);transition:transform .8s ease;pointer-events:none;}
-  .book-card:hover .scan-hover{transform:translateY(100%);}
-
-  .cover-frame{aspect-ratio:2/3;position:relative;overflow:hidden;border-bottom:1px solid var(--panel-line);}
-
-  /* ===== Accordion ===== */
-  .accordion-btn[aria-expanded="true"] .chev{transform:rotate(180deg);}
-  .accordion-panel{max-height:0;overflow:hidden;transition:max-height .5s ease;}
-
-  /* ===== Circuit line divider ===== */
-  .circuit-divider{height:2px;background:repeating-linear-gradient(90deg, var(--cyan) 0 8px, transparent 8px 14px);opacity:.5;}
-
-  /* ===== Nav mobile ===== */
-  #mobileMenu{transform:translateX(100%);transition:transform .4s ease;}
-  #mobileMenu.open{transform:translateX(0);}
-
-  input:focus, textarea:focus, button:focus, a:focus{outline:2px solid var(--cyan);outline-offset:2px;}
-
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  .adapt-badge{
+    font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ice);border:1px solid var(--ice-dim);display:inline-block;padding:5px 10px;border-radius:20px;
+    margin-bottom:20px;
+  }
+  .adapt-card h3{font-size:26px;margin-bottom:10px;}
+  .adapt-meta{font-family:var(--mono);font-size:12px;color:var(--text-dim);margin-bottom:18px;}
+  .adapt-card p{color:var(--text-muted);font-size:15px;margin-bottom:22px;}
+  .reel{
+    width:52px;height:52px;border-radius:50%;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;margin-bottom:20px;color:var(--rust-bright);font-size:18px;
   }
 
-  .glow-text{text-shadow:0 0 20px rgba(0,240,255,.5);}
-  .terminal-caret::after{content:"█";animation:blink 1s step-end infinite;color:var(--nasa-orange);}
-  @keyframes blink{50%{opacity:0;}}
+  /* ===== Official Links ===== */
+  .links-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;background:var(--line);border:1px solid var(--line);}
+  @media(max-width:760px){.links-grid{grid-template-columns:repeat(2,1fr);}}
+  .link-tile{
+    background:var(--bg-1);padding:38px 20px;text-align:center;
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+    transition:background .25s;
+  }
+  .link-tile:hover{background:var(--card);}
+  .link-tile i{font-size:22px;color:var(--text-muted);transition:color .25s;}
+  .link-tile:hover i{color:var(--rust-bright);}
+  .link-tile span{font-family:var(--mono);font-size:11.5px;letter-spacing:.05em;color:var(--text-muted);}
+
+  /* ===== Newsletter ===== */
+  .newsletter{
+    background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    text-align:center;
+  }
+  .newsletter .wrap{max-width:600px;}
+  .newsletter h2{font-size:clamp(28px,3.6vw,36px);margin-bottom:14px;}
+  .newsletter p{color:var(--text-muted);margin-bottom:34px;}
+  .news-form{display:flex;gap:12px;max-width:440px;margin:0 auto;}
+  @media(max-width:480px){.news-form{flex-direction:column;}}
+  .news-form input{
+    flex:1;background:var(--bg-1);border:1px solid var(--line);border-radius:3px;
+    padding:15px 16px;color:var(--text);font-family:var(--serif);font-size:15px;
+  }
+  .news-form input:focus{outline:none;border-color:var(--ice-dim);}
+  .news-note{margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--text-dim);}
+  .news-success{
+    display:none;margin-top:20px;font-family:var(--mono);font-size:12.5px;color:var(--ice);
+    border:1px solid var(--ice-dim);border-radius:3px;padding:12px 16px;
+  }
+  .news-success.show{display:block;}
+
+  /* ===== Footer ===== */
+  footer{padding:60px 0 40px;}
+  .footer-top{
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:40px;margin-bottom:50px;
+  }
+  .footer-brand .nav-logo{margin-bottom:14px;}
+  .footer-brand p{color:var(--text-dim);font-size:13.5px;max-width:280px;}
+  .footer-cols{display:flex;gap:60px;flex-wrap:wrap;}
+  .footer-col span{
+    display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--text-dim);margin-bottom:16px;
+  }
+  .footer-col a{display:block;color:var(--text-muted);font-size:14px;margin-bottom:10px;}
+  .footer-col a:hover{color:var(--text);}
+  .footer-bottom{
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;
+    padding-top:30px;border-top:1px solid var(--line);
+    font-family:var(--mono);font-size:11.5px;color:var(--text-dim);
+  }
+  .footer-social{display:flex;gap:18px;}
+  .footer-social a{font-size:15px;color:var(--text-dim);}
+  .footer-social a:hover{color:var(--rust-bright);}
+  .back-top{color:var(--text-dim);}
+  .back-top:hover{color:var(--text);}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+    html{scroll-behavior:auto;}
+  }
 </style>
 </head>
-<body class="scanlines">
+<body>
 
-<div id="starfield"></div>
-<div class="blueprint-grid hex-bg" style="position:fixed;inset:0;z-index:0;opacity:.5;pointer-events:none;"></div>
-
-<!-- ============ NAV ============ -->
-<nav id="mainnav">
-  <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
-    <a href="#home" class="logo-mark text-lg md:text-xl text-white">ANDY<span>WEIR</span></a>
-    <div class="hidden md:flex items-center gap-9">
-      <a href="#home" class="nav-link">Home</a>
-      <a href="#about" class="nav-link">About</a>
-      <a href="#books" class="nav-link">Books</a>
-      <a href="#science" class="nav-link">Science</a>
-      <a href="#newsletter" class="nav-link">Newsletter</a>
-      <a href="#contact" class="nav-link">Contact</a>
-    </div>
-    <button id="menuBtn" class="md:hidden text-2xl text-cyan-300" aria-label="Open menu" style="color:var(--cyan)">
-      <i class="fa-solid fa-bars"></i>
-    </button>
-  </div>
-</nav>
-
-<!-- Mobile menu -->
-<div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 z-50 md:hidden" style="background:rgba(11,13,23,.98);border-left:1px solid var(--panel-line);">
-  <div class="flex justify-end p-6">
-    <button id="closeMenu" class="text-2xl" style="color:var(--cyan)"><i class="fa-solid fa-xmark"></i></button>
-  </div>
-  <div class="flex flex-col gap-8 px-8 pt-6">
-    <a href="#home" class="nav-link mobile-link">Home</a>
-    <a href="#about" class="nav-link mobile-link">About</a>
-    <a href="#books" class="nav-link mobile-link">Books</a>
-    <a href="#science" class="nav-link mobile-link">Science</a>
-    <a href="#newsletter" class="nav-link mobile-link">Newsletter</a>
-    <a href="#contact" class="nav-link mobile-link">Contact</a>
-  </div>
+<div class="rail" aria-hidden="true">
+  <div class="rail-line"></div>
+  <div class="rail-progress" id="railProgress"></div>
+  <div class="rail-marks" id="railMarks"></div>
 </div>
 
+<nav class="nav" id="mainNav">
+  <a href="#top" class="nav-logo">ANDY WEIR<small>HARD SCIENCE FICTION</small></a>
+  <div class="nav-links">
+    <a href="#about">Author</a>
+    <a href="#books">Books</a>
+    <a href="#adaptations">Adaptations</a>
+    <a href="#links">Connect</a>
+  </div>
+  <a href="https://www.amazon.com/stores/author/B00G0WYW92" target="_blank" rel="noopener" class="nav-cta">Shop on Amazon →</a>
+</nav>
+
 <!-- ============ HERO ============ -->
-<header id="home" class="relative min-h-screen flex items-center overflow-hidden">
-  <div id="heroSlides" class="absolute inset-0 z-0">
-    <div class="hero-slide active">
-      <div class="surface mars-surface"></div>
-    </div>
-    <div class="hero-slide">
-      <div class="surface moon-surface"></div>
-    </div>
-    <div class="hero-slide">
-      <div class="surface stars-surface"></div>
+<header class="hero" id="top">
+  <div class="hero-art">
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#050810"/>
+          <stop offset="38%" stop-color="#0c1220"/>
+          <stop offset="62%" stop-color="#2a1e22"/>
+          <stop offset="78%" stop-color="#6b3a26"/>
+          <stop offset="100%" stop-color="#c1662f"/>
+        </linearGradient>
+        <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffd9ad" stop-opacity="0.95"/>
+          <stop offset="40%" stop-color="#e2854e" stop-opacity="0.55"/>
+          <stop offset="100%" stop-color="#e2854e" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3a2118"/>
+          <stop offset="100%" stop-color="#160c09"/>
+        </linearGradient>
+        <linearGradient id="dune" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#4a2818"/>
+          <stop offset="100%" stop-color="#20120c"/>
+        </linearGradient>
+      </defs>
+
+      <rect width="1600" height="900" fill="url(#sky)"/>
+
+      <!-- stars -->
+      <g fill="#fff" opacity="0.55">
+        <circle cx="120" cy="70" r="1.4"/><circle cx="260" cy="140" r="1"/><circle cx="410" cy="60" r="1.2"/>
+        <circle cx="530" cy="180" r="1"/><circle cx="640" cy="90" r="1.5"/><circle cx="760" cy="50" r="1"/>
+        <circle cx="880" cy="150" r="1.2"/><circle cx="990" cy="70" r="1"/><circle cx="1120" cy="120" r="1.4"/>
+        <circle cx="1250" cy="60" r="1"/><circle cx="1360" cy="160" r="1.2"/><circle cx="1470" cy="90" r="1"/>
+        <circle cx="60" cy="220" r="1"/><circle cx="330" cy="250" r="1"/><circle cx="900" cy="240" r="1"/>
+        <circle cx="1500" cy="220" r="1.3"/><circle cx="1550" cy="130" r="1"/>
+      </g>
+
+      <!-- distant sun glow near horizon -->
+      <circle cx="1180" cy="520" r="220" fill="url(#sun)"/>
+      <circle cx="1180" cy="522" r="46" fill="#ffe8cc" opacity="0.85"/>
+
+      <!-- far ridge -->
+      <path d="M0,560 L120,542 260,555 420,530 600,548 780,520 980,545 1180,510 1360,540 1600,520 L1600,900 L0,900 Z" fill="url(#dune)" opacity="0.9"/>
+
+      <!-- mid dunes -->
+      <path d="M0,640 L200,610 380,635 560,600 760,630 980,595 1200,625 1400,600 1600,620 L1600,900 L0,900 Z" fill="#2a1610"/>
+
+      <!-- foreground ground -->
+      <path d="M0,720 L240,700 460,725 700,695 940,720 1180,690 1420,715 1600,700 L1600,900 L0,900 Z" fill="url(#ground)"/>
+
+      <!-- craters -->
+      <ellipse cx="300" cy="770" rx="70" ry="14" fill="#0f0906" opacity="0.6"/>
+      <ellipse cx="980" cy="800" rx="100" ry="18" fill="#0f0906" opacity="0.5"/>
+      <ellipse cx="1350" cy="760" rx="60" ry="12" fill="#0f0906" opacity="0.55"/>
+
+      <!-- habitat dome, mid-right -->
+      <g opacity="0.92">
+        <ellipse cx="1080" cy="672" rx="64" ry="26" fill="#0a0e14"/>
+        <path d="M1016,672 A64,50 0 0 1 1144,672" fill="#131a24" stroke="#324356" stroke-width="1.5"/>
+        <rect x="1070" y="616" width="6" height="26" fill="#131a24"/>
+        <circle cx="1073" cy="612" r="5" fill="none" stroke="#e2854e" stroke-width="1.5"/>
+        <rect x="1040" y="655" width="14" height="18" fill="#1c2636" stroke="#324356" stroke-width="1"/>
+        <rect x="1100" y="655" width="14" height="18" fill="#1c2636" stroke="#324356" stroke-width="1"/>
+      </g>
+
+      <!-- rover tracks -->
+      <path d="M120,900 C260,820 340,790 470,760" stroke="#0f0906" stroke-width="5" fill="none" opacity="0.5"/>
+      <path d="M140,900 C280,825 355,795 480,766" stroke="#0f0906" stroke-width="5" fill="none" opacity="0.5"/>
+
+      <!-- lone astronaut silhouette -->
+      <g transform="translate(430,690)" opacity="0.96">
+        <ellipse cx="0" cy="112" rx="34" ry="7" fill="#050302" opacity="0.4"/>
+        <path d="M-6,10 C-14,10 -18,20 -16,34 L-13,72 L-9,110 L-2,110 L-1,74 L2,74 L4,110 L11,110 L14,70 L18,32 C20,18 15,9 6,9 Z" fill="#0a0c10"/>
+        <path d="M-16,34 L-30,58" stroke="#0a0c10" stroke-width="9" stroke-linecap="round"/>
+        <path d="M18,32 L31,50" stroke="#0a0c10" stroke-width="9" stroke-linecap="round"/>
+        <circle cx="0" cy="-6" r="15" fill="#0a0c10"/>
+        <circle cx="0" cy="-6" r="10" fill="#1a2230" stroke="#e2854e" stroke-width="1" opacity="0.8"/>
+        <rect x="-8" y="8" width="16" height="14" rx="3" fill="#12161c"/>
+      </g>
+
+      <!-- distant second figure for scale -->
+      <g transform="translate(760,706) scale(0.55)" opacity="0.55">
+        <path d="M-6,10 C-14,10 -18,20 -16,34 L-13,72 L-9,110 L-2,110 L-1,74 L2,74 L4,110 L11,110 L14,70 L18,32 C20,18 15,9 6,9 Z" fill="#0a0c10"/>
+        <circle cx="0" cy="-6" r="15" fill="#0a0c10"/>
+      </g>
+    </svg>
+  </div>
+  <div class="hero-scrim"></div>
+
+  <div class="wrap hero-inner">
+    <div class="hero-content">
+      <div class="eyebrow">SOL 0001 · HARD SCIENCE FICTION</div>
+      <h1>ANDY<br>WEIR</h1>
+      <p class="hero-tagline">The physics is real. The stakes are higher.</p>
+      <p class="hero-intro">#1 <em>New York Times</em> bestselling author of <strong style="color:var(--text)">The Martian</strong>, <strong style="color:var(--text)">Artemis</strong>, and <strong style="color:var(--text)">Project Hail Mary</strong> — three novels that turn orbital mechanics, botany, and hard vacuum into page-turning, laugh-out-loud survival stories.</p>
+      <div class="hero-ctas">
+        <a href="https://www.amazon.com/stores/author/B00G0WYW92" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-brands fa-amazon"></i> Explore Books on Amazon</a>
+        <a href="#books" class="btn btn-ghost">View Featured Books</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b>4</b><span>Published Novels</span></div>
+        <div class="hero-stat"><b>2</b><span>Feature Film Adaptations</span></div>
+        <div class="hero-stat"><b>2016</b><span>Campbell Award, Best New Writer</span></div>
+        <div class="hero-stat"><b>#1</b><span>NYT Bestseller</span></div>
+      </div>
     </div>
   </div>
-
-  <div class="absolute inset-0 z-0" style="background:linear-gradient(180deg, rgba(11,13,23,.35), rgba(11,13,23,.85) 75%, #0B0D17 100%);"></div>
-
-  <!-- HUD reticles (decorative) -->
-  <div class="reticle hidden md:block" style="width:120px;height:120px;top:18%;right:8%;"></div>
-  <div class="reticle hidden md:block" style="width:60px;height:60px;bottom:22%;left:6%;"></div>
-
-  <div class="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20 w-full">
-    <div class="badge mb-6"><span class="dot"></span>MISSION STATUS: ACTIVE — ALL SYSTEMS NOMINAL</div>
-
-    <h1 class="text-4xl sm:text-6xl md:text-7xl leading-[1.05] font-black text-white mb-6 glow-text">
-      SCIENCE FICTION<br><span style="color:var(--nasa-orange)">BY A SCIENTIST</span>
-    </h1>
-
-    <p class="rajdhani text-xl md:text-2xl max-w-2xl mb-2" style="color:var(--cyan)">
-      Author of <em>The Martian</em> and <em>Project Hail Mary</em>.
-    </p>
-    <p class="mono text-sm md:text-base max-w-xl mb-10 text-slate-300 leading-relaxed">
-      Real hard science. Real engineering. Real physics. Real solutions.
-    </p>
-
-    <div class="flex flex-wrap gap-5">
-      <a href="https://www.amazon.com/dp/0593135202" target="_blank" rel="noopener" class="btn-primary">
-        <i class="fa-solid fa-rocket mr-2"></i>Initiate Sequence
-      </a>
-      <a href="#books" class="btn-ghost">View Mission Log</a>
-    </div>
-
-    <div class="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl mono text-xs text-slate-400">
-      <div><span style="color:var(--circuit-green)">●</span> NYT #1 Bestseller</div>
-      <div><span style="color:var(--circuit-green)">●</span> Hugo Finalist '22</div>
-      <div><span style="color:var(--circuit-green)">●</span> 2x Film Adaptations</div>
-      <div><span style="color:var(--circuit-green)">●</span> Est. 2011</div>
-    </div>
-  </div>
-
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 mono text-xs tracking-widest text-slate-400 animate-bounce">
-    SCROLL <i class="fa-solid fa-chevron-down ml-1"></i>
-  </div>
+  <div class="scroll-cue">SCROLL<div class="line"></div></div>
 </header>
 
 <!-- ============ ABOUT ============ -->
-<section id="about" class="relative py-28 px-6">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-16 reveal">
-      <span class="mono text-xs tracking-[.3em]" style="color:var(--nasa-orange)">CREW FILE // 001</span>
-      <h2 class="hud-title text-3xl md:text-5xl font-black mt-3 text-white">MISSION SPECIALIST</h2>
-    </div>
-
-    <div class="grid md:grid-cols-5 gap-12 items-start">
-      <div class="md:col-span-2 reveal">
-        <div class="panel p-3">
-          <div class="relative overflow-hidden" style="aspect-ratio:4/5;">
-            <div class="absolute inset-0" style="background:linear-gradient(160deg,#1c2436,#0B0D17 70%);"></div>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <i class="fa-solid fa-user-astronaut" style="font-size:9rem;color:rgba(0,240,255,.25);"></i>
-            </div>
-            <div class="absolute top-3 left-3 mono text-[10px]" style="color:var(--circuit-green)">FEED // AW-01</div>
-            <div class="absolute bottom-3 right-3 mono text-[10px] text-slate-400">DAVIS, CA — b.1972</div>
-          </div>
+<section class="section" id="about">
+  <div class="wrap">
+    <div class="about-grid reveal">
+      <div>
+        <div class="about-photo">
+          <img src="https://res.cloudinary.com/itimages/image/fetch/c_fill,w_600,h_720,f_auto,q_auto/https://images.penguinrandomhouse.com/author/184612" alt="Portrait of author Andy Weir">
         </div>
-        <div class="grid grid-cols-2 gap-4 mt-6">
-          <div class="panel p-5 text-center">
-            <div class="mono text-2xl font-bold" style="color:var(--nasa-orange)">15M+</div>
-            <div class="mono text-[10px] tracking-widest text-slate-400 mt-1">BOOKS SOLD (THE MARTIAN)</div>
-          </div>
-          <div class="panel p-5 text-center">
-            <div class="mono text-2xl font-bold" style="color:var(--cyan)">ENGINEER</div>
-            <div class="mono text-[10px] tracking-widest text-slate-400 mt-1">OCCUPATION → NOVELIST</div>
-          </div>
-          <div class="panel p-5 text-center">
-            <div class="mono text-2xl font-bold" style="color:var(--circuit-green)">HARD SF</div>
-            <div class="mono text-[10px] tracking-widest text-slate-400 mt-1">PRIMARY GENRE</div>
-          </div>
-          <div class="panel p-5 text-center">
-            <div class="mono text-2xl font-bold text-white">ACTIVE</div>
-            <div class="mono text-[10px] tracking-widest text-slate-400 mt-1">STATUS</div>
-          </div>
-        </div>
+        <div class="about-photo-cap">PHOTO © AUBRIE PICK</div>
       </div>
-
-      <div class="md:col-span-3 reveal">
-        <h3 class="rajdhani text-2xl font-bold mb-6 text-white">Biography</h3>
-        <div class="space-y-5 text-slate-300 leading-relaxed">
-          <p>Andy Weir built a two-decade career as a software engineer until the success of his first published novel, <em>The Martian</em>, allowed him to live out his dream of writing full-time. He is a lifelong space nerd and a devoted hobbyist of subjects such as relativistic physics, orbital mechanics, and the history of manned spaceflight. He also mixes a mean cocktail. He lives in California.</p>
-          <p>Born June 16, 1972, in Davis, California, and raised in Livermore, Weir grew up in a household of engineers — his father was a physicist at Lawrence Livermore National Laboratory, and his mother was an electrical engineer. He was hired as a computer programmer at the age of fifteen, and later studied computer science at UC San Diego before leaving to pursue software engineering roles at companies including AOL, Palm, MobileIron, and Blizzard.</p>
-          <p>Weir spent years writing science fiction for free on his personal website. <em>The Martian</em> began as a serialized story there — researched down to the exact orbital mechanics, Martian weather, and botany required to strand astronaut Mark Watney believably on the Red Planet. Fans asked for a Kindle version; Weir uploaded it for 99 cents, the story climbed the Kindle bestseller charts, and a literary agent brought it to Crown Publishing Group. The rest is orbital history.</p>
-          <p>His writing philosophy is simple: the science has to work. Every survival trick, every equation, every improvised repair is grounded in real engineering — problem-solving under pressure, delivered with the dry, self-deprecating humor of an engineer narrating his own near-death experience. That same approach carried through <em>Artemis</em>'s lunar-gravity heist and <em>Project Hail Mary</em>'s astrobiology and first-contact puzzle-solving.</p>
+      <div class="about-copy">
+        <div class="eyebrow">SOL 0002 · THE AUTHOR</div>
+        <h2 style="font-size:clamp(28px,3.4vw,38px);margin-bottom:24px;">Two decades in engineering. A lifetime obsessed with space.</h2>
+        <p>Andy Weir spent nearly twenty years working as a software engineer — including a stint at Blizzard Entertainment — before the runaway success of his debut novel let him write full time. He grew up in Livermore, California, the son of a physicist and an electrical engineer, and started programming professionally at fifteen.</p>
+        <p>A self-described lifelong space nerd, Weir treats <strong>relativistic physics, orbital mechanics, and the history of manned spaceflight</strong> as hobbies rather than homework. That obsession with getting the numbers right is what turned <em>The Martian</em> — a novel he originally serialized for free on his own website — into a 99-cent Kindle bestseller, then a Crown Publishing acquisition, then a No. 12 <em>New York Times</em> bestseller, then a Ridley Scott film.</p>
+        <div class="about-quote">"Complex science, explained in an entertaining and accessible way."</div>
+        <p>That philosophy carried through <strong>Artemis</strong>, a heist thriller set in humanity's first lunar city, and <strong>Project Hail Mary</strong>, a first-contact survival story that became a second commercial phenomenon and a 2026 feature film starring Ryan Gosling. Weir received the John W. Campbell Award for Best New Writer in 2016, and <em>Project Hail Mary</em> was a finalist for the 2022 Hugo Award for Best Novel.</p>
+        <div class="about-facts">
+          <div class="fact"><b>Davis &amp; Livermore, CA</b><span>Origin</span></div>
+          <div class="fact"><b>UC San Diego</b><span>Computer Science</span></div>
+          <div class="fact"><b>2016</b><span>Campbell Award</span></div>
+          <div class="fact"><b>2022</b><span>Hugo Award Finalist</span></div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="circuit-divider max-w-7xl mx-auto"></div>
+<div class="wrap"><div class="divider"></div></div>
 
-<!-- ============ BOOKS ============ -->
-<section id="books" class="relative py-28 px-6">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-16 reveal">
-      <span class="mono text-xs tracking-[.3em]" style="color:var(--nasa-orange)">PAYLOAD MANIFEST</span>
-      <h2 class="hud-title text-3xl md:text-5xl font-black mt-3 text-white">FEATURED BOOKS</h2>
+<!-- ============ FEATURED BOOKS ============ -->
+<section class="section books" id="books">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">SOL 0003 · BIBLIOGRAPHY</div>
+      <h2>Featured Books</h2>
+      <p>Four novels. One relentless commitment to getting the science right — and making it funny.</p>
+    </div>
+  </div>
+
+  <div class="book-grid">
+
+    <div class="book-card reveal">
+      <div class="book-cover">
+        <img src="https://res.cloudinary.com/itimages/image/fetch/c_scale,w_400,q_auto:eco,f_auto/https://images.randomhouse.com/cover/d/9780553418026" alt="The Martian">
+        <div class="book-year">EST. 2011</div>
+      </div>
+      <div class="book-body">
+        <div class="book-tags"><span class="tag">Hard Sci-Fi</span><span class="tag">Survival</span></div>
+        <h3>The Martian</h3>
+        <p class="book-desc">Six days into a Mars mission, astronaut Mark Watney is left for dead after a dust storm forces his crew to evacuate without him. Alone on a hostile planet with failing supplies, he has to engineer his own survival — one problem, one experiment, one wisecrack at a time.</p>
+        <div class="book-desc-more" data-more>The novel began as a free serial on Weir's own website before reader demand pushed it to Kindle, where it climbed the bestseller charts on word of mouth alone. It later debuted on the <em>New York Times</em> bestseller list and was adapted into the 2015 film directed by Ridley Scott.</div>
+        <div class="book-actions">
+          <button class="learn-more" data-toggle><span>Learn More</span> <i class="fa-solid fa-chevron-down"></i></button>
+          <a class="buy-btn" href="http://www.amazon.com/gp/product/0553418025?tag=randohouseinc47720-20" target="_blank" rel="noopener"><i class="fa-brands fa-amazon"></i> Buy on Amazon</a>
+        </div>
+      </div>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="book-card reveal">
+      <div class="book-cover">
+        <img src="https://res.cloudinary.com/itimages/image/fetch/c_scale,w_400,q_auto:eco,f_auto/https://images.randomhouse.com/cover/d/9780553448146" alt="Artemis">
+        <div class="book-year">EST. 2017</div>
+      </div>
+      <div class="book-body">
+        <div class="book-tags"><span class="tag">Near-Future</span><span class="tag">Heist Thriller</span></div>
+        <h3>Artemis</h3>
+        <p class="book-desc">Jazz Bashara is a smuggler scraping by in Artemis, humanity's first and only lunar city, when a shot at a life-changing score pulls her into a full-blown conspiracy for control of the colony itself.</p>
+        <div class="book-desc-more" data-more>Weir builds Artemis with the same engineering rigor he applied to Mars — economics, life support, and lunar law all get worked out in detail — while keeping the plot moving with a wisecracking heroine, a ticking clock, and no shortage of large explosions.</div>
+        <div class="book-actions">
+          <button class="learn-more" data-toggle><span>Learn More</span> <i class="fa-solid fa-chevron-down"></i></button>
+          <a class="buy-btn" href="http://www.amazon.com/gp/product/0553448145?tag=randohouseinc47720-20" target="_blank" rel="noopener"><i class="fa-brands fa-amazon"></i> Buy on Amazon</a>
+        </div>
+      </div>
+    </div>
 
-      <!-- The Martian -->
-      <article class="book-card reveal">
-        <div class="scan-hover"></div>
-        <div class="cover-frame">
-          <svg viewBox="0 0 300 450" class="w-full h-full">
-            <rect width="300" height="450" fill="#120704"/>
-            <circle cx="150" cy="230" r="150" fill="#8a3216"/>
-            <circle cx="105" cy="180" r="20" fill="#5c2110" opacity=".6"/>
-            <circle cx="200" cy="260" r="30" fill="#5c2110" opacity=".5"/>
-            <circle cx="170" cy="150" r="12" fill="#5c2110" opacity=".7"/>
-            <rect width="300" height="450" fill="url(#gradMartian)"/>
-            <defs><linearGradient id="gradMartian" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#000" stop-opacity=".7"/>
-              <stop offset="45%" stop-color="#000" stop-opacity="0"/>
-              <stop offset="100%" stop-color="#000" stop-opacity=".8"/>
-            </linearGradient></defs>
-            <text x="150" y="70" text-anchor="middle" fill="#F0F4F8" font-family="Orbitron" font-size="30" font-weight="900">THE</text>
-            <text x="150" y="112" text-anchor="middle" fill="#FF6B35" font-family="Orbitron" font-size="34" font-weight="900">MARTIAN</text>
-            <text x="150" y="410" text-anchor="middle" fill="#00F0FF" font-family="Roboto Mono" font-size="13">ANDY WEIR</text>
-          </svg>
+    <div class="book-card reveal">
+      <div class="book-cover">
+        <img src="https://res.cloudinary.com/itimages/image/fetch/c_scale,w_400,q_auto:eco,f_auto/https://images.randomhouse.com/cover/d/9780593135204" alt="Project Hail Mary">
+        <div class="book-year">EST. 2021</div>
+      </div>
+      <div class="book-body">
+        <div class="book-tags"><span class="tag">Space Opera</span><span class="tag">First Contact</span></div>
+        <h3>Project Hail Mary</h3>
+        <p class="book-desc">Ryland Grace wakes up alone on a spacecraft millions of miles from home with no memory of his mission, his crewmates dead beside him, and humanity's survival resting entirely on whether he can piece it all back together in time.</p>
+        <div class="book-desc-more" data-more>A #1 <em>New York Times</em> bestseller and 2022 Hugo Award finalist, praised by critics for pairing genuine scientific problem-solving with real warmth. The 2026 film adaptation stars Ryan Gosling and Sandra Hüller, directed by Phil Lord and Christopher Miller.</div>
+        <div class="book-actions">
+          <button class="learn-more" data-toggle><span>Learn More</span> <i class="fa-solid fa-chevron-down"></i></button>
+          <a class="buy-btn" href="http://www.amazon.com/gp/product/0593135202?tag=randohouseinc47720-20" target="_blank" rel="noopener"><i class="fa-brands fa-amazon"></i> Buy on Amazon</a>
         </div>
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-2 mono text-[11px] text-slate-400">
-            <span>PUB. 2014</span><span>384 PP</span>
-          </div>
-          <h3 class="rajdhani text-2xl font-bold text-white mb-2">The Martian</h3>
-          <p class="text-xs mb-3" style="color:var(--circuit-green)">Orbital Mechanics · Botany · Survival Engineering</p>
-          <p class="text-sm text-slate-300 leading-relaxed mb-5">Stranded alone on Mars after his crew presumes him dead, astronaut and botanist Mark Watney must improvise his way to survival using nothing but ingenuity, duct tape, and hard science.</p>
-          <a href="https://www.amazon.com/dp/0553418025" target="_blank" rel="noopener" class="btn-primary w-full text-center block text-sm">Buy on Amazon</a>
-        </div>
-      </article>
+      </div>
+    </div>
 
-      <!-- Project Hail Mary -->
-      <article class="book-card reveal">
-        <div class="scan-hover"></div>
-        <div class="cover-frame">
-          <svg viewBox="0 0 300 450" class="w-full h-full">
-            <rect width="300" height="450" fill="#04070f"/>
-            <circle cx="220" cy="90" r="46" fill="#ffdd88"/>
-            <circle cx="220" cy="90" r="70" fill="#ffdd88" opacity=".12"/>
-            <ellipse cx="120" cy="330" rx="120" ry="60" fill="#132033"/>
-            <circle cx="90" cy="300" r="10" fill="#00F0FF" opacity=".7"/>
-            <rect x="0" y="0" width="300" height="450" fill="url(#gradPHM)"/>
-            <defs><linearGradient id="gradPHM" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#000" stop-opacity=".55"/>
-              <stop offset="50%" stop-color="#000" stop-opacity="0"/>
-              <stop offset="100%" stop-color="#000" stop-opacity=".85"/>
-            </linearGradient></defs>
-            <text x="150" y="245" text-anchor="middle" fill="#F0F4F8" font-family="Orbitron" font-size="15" letter-spacing="2">PROJECT</text>
-            <text x="150" y="285" text-anchor="middle" fill="#00F0FF" font-family="Orbitron" font-size="30" font-weight="900">HAIL MARY</text>
-            <text x="150" y="410" text-anchor="middle" fill="#FF6B35" font-family="Roboto Mono" font-size="13">ANDY WEIR</text>
-          </svg>
+    <div class="book-card reveal">
+      <div class="book-cover">
+        <img src="https://res.cloudinary.com/itimages/image/fetch/c_scale,w_400,q_auto:eco,f_auto/https://images.randomhouse.com/cover/d/9780399582073" alt="Cheshire Crossing">
+        <div class="book-year">EST. 2019</div>
+      </div>
+      <div class="book-body">
+        <div class="book-tags"><span class="tag">Graphic Novel</span><span class="tag">Adventure</span></div>
+        <h3>Cheshire Crossing</h3>
+        <p class="book-desc">Alice, Wendy, and Dorothy — now teenagers who've had enough of meddling authority figures — reunite at a boarding school for girls who've crossed into magical worlds, and immediately go looking for trouble across the multiverse.</p>
+        <div class="book-desc-more" data-more>Originating as Weir's own fan fiction, the story was reimagined as a graphic novel with illustrator Sarah Andersen (<em>Sarah's Scribbles</em>), earning a starred <em>Kirkus</em> review for its blend of humor and inventive world-crossing.</div>
+        <div class="book-actions">
+          <button class="learn-more" data-toggle><span>Learn More</span> <i class="fa-solid fa-chevron-down"></i></button>
+          <a class="buy-btn" href="http://www.amazon.com/gp/product/039958207X?tag=randohouseinc47720-20" target="_blank" rel="noopener"><i class="fa-brands fa-amazon"></i> Buy on Amazon</a>
         </div>
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-2 mono text-[11px] text-slate-400">
-            <span>PUB. 2021</span><span>494 PP</span>
-          </div>
-          <h3 class="rajdhani text-2xl font-bold text-white mb-2">Project Hail Mary</h3>
-          <p class="text-xs mb-3" style="color:var(--circuit-green)">Astrobiology · First Contact · Relativistic Physics</p>
-          <p class="text-sm text-slate-300 leading-relaxed mb-5">Ryland Grace wakes up alone on a spacecraft with no memory, millions of miles from home. He must reconstruct his mission and stop an extinction-level threat to humanity — possibly with an unexpected ally.</p>
-          <a href="https://www.amazon.com/dp/0593135202" target="_blank" rel="noopener" class="btn-primary w-full text-center block text-sm">Buy on Amazon</a>
-        </div>
-      </article>
+      </div>
+    </div>
 
-      <!-- Artemis -->
-      <article class="book-card reveal">
-        <div class="scan-hover"></div>
-        <div class="cover-frame">
-          <svg viewBox="0 0 300 450" class="w-full h-full">
-            <rect width="300" height="450" fill="#0d0f1a"/>
-            <circle cx="150" cy="150" r="95" fill="#d7dbe0"/>
-            <circle cx="120" cy="120" r="14" fill="#b8bcc2"/>
-            <circle cx="180" cy="170" r="20" fill="#b8bcc2"/>
-            <circle cx="110" cy="190" r="9" fill="#b8bcc2"/>
-            <rect x="0" y="330" width="300" height="120" fill="#1a1f2e"/>
-            <circle cx="150" cy="345" r="4" fill="#FF6B35"/>
-            <circle cx="120" cy="345" r="4" fill="#FF6B35" opacity=".6"/>
-            <circle cx="180" cy="345" r="4" fill="#FF6B35" opacity=".6"/>
-            <rect x="0" y="0" width="300" height="450" fill="url(#gradArt)"/>
-            <defs><linearGradient id="gradArt" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#000" stop-opacity=".5"/>
-              <stop offset="55%" stop-color="#000" stop-opacity="0"/>
-              <stop offset="100%" stop-color="#000" stop-opacity=".85"/>
-            </linearGradient></defs>
-            <text x="150" y="300" text-anchor="middle" fill="#F0F4F8" font-family="Orbitron" font-size="32" font-weight="900">ARTEMIS</text>
-            <text x="150" y="410" text-anchor="middle" fill="#00F0FF" font-family="Roboto Mono" font-size="13">ANDY WEIR</text>
-          </svg>
-        </div>
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-2 mono text-[11px] text-slate-400">
-            <span>PUB. 2017</span><span>320 PP</span>
-          </div>
-          <h3 class="rajdhani text-2xl font-bold text-white mb-2">Artemis</h3>
-          <p class="text-xs mb-3" style="color:var(--circuit-green)">Lunar Engineering · Low-Gravity Systems · Heist</p>
-          <p class="text-sm text-slate-300 leading-relaxed mb-5">Jazz Bashara is a porter and small-time smuggler in Artemis, the first and only city on the Moon. A shot at the perfect crime pulls her into a conspiracy that threatens the entire lunar settlement.</p>
-          <a href="https://www.amazon.com/dp/0553448129" target="_blank" rel="noopener" class="btn-primary w-full text-center block text-sm">Buy on Amazon</a>
-        </div>
-      </article>
+  </div>
+</section>
 
-      <!-- Cheshire Crossing -->
-      <article class="book-card reveal">
-        <div class="scan-hover"></div>
-        <div class="cover-frame">
-          <svg viewBox="0 0 300 450" class="w-full h-full">
-            <rect width="300" height="450" fill="#1a0f1c"/>
-            <path d="M0 380 Q 150 300 300 380 L300 450 L0 450 Z" fill="#3a1f42"/>
-            <circle cx="90" cy="140" r="34" fill="#C1440E" opacity=".85"/>
-            <circle cx="190" cy="120" r="26" fill="#00C851" opacity=".7"/>
-            <circle cx="150" cy="200" r="30" fill="#00F0FF" opacity=".55"/>
-            <rect x="0" y="0" width="300" height="450" fill="url(#gradCC)"/>
-            <defs><linearGradient id="gradCC" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#000" stop-opacity=".45"/>
-              <stop offset="55%" stop-color="#000" stop-opacity="0"/>
-              <stop offset="100%" stop-color="#000" stop-opacity=".85"/>
-            </linearGradient></defs>
-            <text x="150" y="270" text-anchor="middle" fill="#F0F4F8" font-family="Orbitron" font-size="20" font-weight="900">CHESHIRE</text>
-            <text x="150" y="300" text-anchor="middle" fill="#FF6B35" font-family="Orbitron" font-size="20" font-weight="900">CROSSING</text>
-            <text x="150" y="410" text-anchor="middle" fill="#00F0FF" font-family="Roboto Mono" font-size="11">WEIR &amp; ANDERSEN</text>
-          </svg>
-        </div>
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-2 mono text-[11px] text-slate-400">
-            <span>PUB. 2019</span><span>128 PP</span>
-          </div>
-          <h3 class="rajdhani text-2xl font-bold text-white mb-2">Cheshire Crossing</h3>
-          <p class="text-xs mb-3" style="color:var(--circuit-green)">Graphic Novel · Multiverse · Illustrated by Sarah Andersen</p>
-          <p class="text-sm text-slate-300 leading-relaxed mb-5">Alice, Wendy, and Dorothy — now teenagers coping with the aftermath of Wonderland, Neverland, and Oz — team up at a very unusual boarding school to stop a supervillain team-up threatening every world they've crossed.</p>
-          <a href="https://www.amazon.com/dp/039958207X" target="_blank" rel="noopener" class="btn-primary w-full text-center block text-sm">Buy on Amazon</a>
-        </div>
-      </article>
-
-      <!-- Randomize -->
-      <article class="book-card reveal">
-        <div class="scan-hover"></div>
-        <div class="cover-frame">
-          <svg viewBox="0 0 300 450" class="w-full h-full">
-            <rect width="300" height="450" fill="#0a0c14"/>
-            <g opacity=".5">
-              <rect x="30" y="60" width="240" height="2" fill="#00F0FF"/>
-              <rect x="30" y="90" width="180" height="2" fill="#00F0FF"/>
-              <rect x="30" y="120" width="210" height="2" fill="#00F0FF"/>
-            </g>
-            <circle cx="150" cy="230" r="70" fill="none" stroke="#FF6B35" stroke-width="3"/>
-            <circle cx="150" cy="230" r="46" fill="none" stroke="#00C851" stroke-width="2"/>
-            <text x="150" y="238" text-anchor="middle" fill="#F0F4F8" font-family="Roboto Mono" font-size="26">7 4 2</text>
-            <rect x="0" y="0" width="300" height="450" fill="url(#gradRZ)"/>
-            <defs><linearGradient id="gradRZ" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#000" stop-opacity=".5"/>
-              <stop offset="55%" stop-color="#000" stop-opacity="0"/>
-              <stop offset="100%" stop-color="#000" stop-opacity=".85"/>
-            </linearGradient></defs>
-            <text x="150" y="335" text-anchor="middle" fill="#F0F4F8" font-family="Orbitron" font-size="26" font-weight="900">RANDOMIZE</text>
-            <text x="150" y="410" text-anchor="middle" fill="#00F0FF" font-family="Roboto Mono" font-size="11">ANDY WEIR · FORWARD</text>
-          </svg>
-        </div>
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-2 mono text-[11px] text-slate-400">
-            <span>PUB. 2019</span><span>SHORT STORY</span>
-          </div>
-          <h3 class="rajdhani text-2xl font-bold text-white mb-2">Randomize</h3>
-          <p class="text-xs mb-3" style="color:var(--circuit-green)">Quantum Computing · Casino Heist · Near Future</p>
-          <p class="text-sm text-slate-300 leading-relaxed mb-5">Part of the <em>Forward</em> anthology curated by Blake Crouch: an IT specialist upgrades a casino's quantum random-number generator to be foolproof — until someone on the inside proves otherwise.</p>
-          <a href="https://www.amazon.com/dp/B07VDJBKNJ" target="_blank" rel="noopener" class="btn-primary w-full text-center block text-sm">Buy on Amazon</a>
-        </div>
-      </article>
-
+<!-- ============ AMAZON AUTHOR ============ -->
+<section class="section amazon-cta" id="amazon">
+  <div class="wrap">
+    <div class="amazon-panel reveal">
+      <div>
+        <div class="eyebrow">SOL 0004 · AMAZON AUTHOR PAGE</div>
+        <h2>Everything Andy Weir, in one place on Amazon.</h2>
+        <p>Follow the author page to browse every book and format, get notified the moment new work drops, and buy straight from the source.</p>
+        <ul class="amazon-points">
+          <li><i class="fa-solid fa-check"></i> Full bibliography across Kindle, print, and audiobook editions</li>
+          <li><i class="fa-solid fa-check"></i> New release alerts sent directly to your Amazon account</li>
+          <li><i class="fa-solid fa-check"></i> Verified biography, photos, and Q&amp;A from Andy Weir himself</li>
+        </ul>
+        <a href="https://www.amazon.com/stores/author/B00G0WYW92" target="_blank" rel="noopener" class="btn btn-primary"><i class="fa-brands fa-amazon"></i> Visit Amazon Author Page</a>
+      </div>
+      <div class="amazon-visual">
+        <div class="av-row"><span>Author Profile</span><span>Verified</span></div>
+        <div class="av-title">Andy Weir</div>
+        <div class="av-sub">#1 New York Times Bestselling Author</div>
+        <div class="av-bar"><i style="width:96%"></i></div>
+        <div class="av-label"><span>Reader Rating</span><span>4.3 / 5 avg. across titles</span></div>
+        <div class="av-bar"><i style="width:100%"></i></div>
+        <div class="av-label"><span>Titles in Print</span><span>4 novels · multiple formats</span></div>
+        <a href="https://www.amazon.com/stores/author/B00G0WYW92" target="_blank" rel="noopener" class="btn btn-ice" style="width:100%;justify-content:center;">Follow on Amazon</a>
+      </div>
     </div>
   </div>
 </section>
 
-<div class="circuit-divider max-w-7xl mx-auto"></div>
-
-<!-- ============ SCIENCE ============ -->
-<section id="science" class="relative py-28 px-6">
-  <div class="max-w-5xl mx-auto">
-    <div class="text-center mb-4 reveal">
-      <span class="mono text-xs tracking-[.3em]" style="color:var(--nasa-orange)">TECHNICAL BRIEFING</span>
-      <h2 class="hud-title text-3xl md:text-5xl font-black mt-3 text-white">THE SCIENCE BEHIND THE FICTION</h2>
+<!-- ============ ADAPTATIONS ============ -->
+<section class="section" id="adaptations">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">SOL 0005 · ON SCREEN</div>
+      <h2>Movie Adaptations</h2>
+      <p>Two novels, two studio feature films — both built around the same idea: smart people solving impossible problems.</p>
     </div>
-    <div class="flex justify-center mb-14 reveal">
-      <span class="badge"><span class="dot"></span>CALCULATIONS VERIFIED</span>
-    </div>
-
-    <div class="space-y-4 reveal">
-
-      <div class="panel">
-        <button class="accordion-btn w-full flex justify-between items-center p-6 text-left" aria-expanded="false">
-          <span class="rajdhani text-xl font-bold text-white"><i class="fa-solid fa-circle-nodes mr-3" style="color:var(--cyan)"></i>Orbital Mechanics</span>
-          <i class="fa-solid fa-chevron-down chev transition-transform" style="color:var(--nasa-orange)"></i>
-        </button>
-        <div class="accordion-panel px-6">
-          <p class="text-slate-300 text-sm leading-relaxed pb-6 border-t border-white/5 pt-4">Every transfer window, launch trajectory, and rendezvous burn in Weir's novels is worked out with real orbital mechanics — the same math NASA uses to plot Hohmann transfers between Earth and Mars. In <em>The Martian</em>, the timing of Mark Watney's resupply and rescue windows is dictated by where Earth and Mars actually sit in their orbits, not narrative convenience.</p>
-        </div>
+    <div class="adapt-grid reveal">
+      <div class="adapt-card">
+        <div class="reel"><i class="fa-solid fa-film"></i></div>
+        <div class="adapt-badge">Released 2015</div>
+        <h3>The Martian</h3>
+        <div class="adapt-meta">Dir. Ridley Scott · Starring Matt Damon · Screenplay by Drew Goddard</div>
+        <p>20th Century Fox's adaptation of Weir's debut novel became a global box-office hit and won the Golden Globe for Best Motion Picture — Musical or Comedy, with Matt Damon winning Best Actor.</p>
       </div>
-
-      <div class="panel">
-        <button class="accordion-btn w-full flex justify-between items-center p-6 text-left" aria-expanded="false">
-          <span class="rajdhani text-xl font-bold text-white"><i class="fa-solid fa-dna mr-3" style="color:var(--cyan)"></i>Astrobiology</span>
-          <i class="fa-solid fa-chevron-down chev transition-transform" style="color:var(--nasa-orange)"></i>
-        </button>
-        <div class="accordion-panel px-6">
-          <p class="text-slate-300 text-sm leading-relaxed pb-6 border-t border-white/5 pt-4"><em>Project Hail Mary</em> builds an entire ecology around a fictional extremophile organism that feeds on stellar energy, then works out its biochemistry, reproduction, and vulnerabilities with the rigor of a research paper. The novel's first-contact biology is grounded in real questions about how life might function under radically different conditions.</p>
-        </div>
+      <div class="adapt-card">
+        <div class="reel"><i class="fa-solid fa-film"></i></div>
+        <div class="adapt-badge">Released March 20, 2026</div>
+        <h3>Project Hail Mary</h3>
+        <div class="adapt-meta">Dir. Phil Lord &amp; Christopher Miller · Starring Ryan Gosling, Sandra Hüller · Screenplay by Drew Goddard</div>
+        <p>Amazon MGM Studios' adaptation opened to the studio's biggest debut to date and is now streaming on Prime Video and MGM+, with Andy Weir serving as a producer on the film.</p>
       </div>
-
-      <div class="panel">
-        <button class="accordion-btn w-full flex justify-between items-center p-6 text-left" aria-expanded="false">
-          <span class="rajdhani text-xl font-bold text-white"><i class="fa-solid fa-gear mr-3" style="color:var(--cyan)"></i>Lunar Engineering</span>
-          <i class="fa-solid fa-chevron-down chev transition-transform" style="color:var(--nasa-orange)"></i>
-        </button>
-        <div class="accordion-panel px-6">
-          <p class="text-slate-300 text-sm leading-relaxed pb-6 border-t border-white/5 pt-4"><em>Artemis</em> works through the practical engineering of a permanent lunar settlement: pressurized domes, welding in one-sixth gravity, oxygen economics, and the industrial processes — like aluminum smelting — that could realistically sustain a city on the Moon.</p>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
 
-<div class="circuit-divider max-w-7xl mx-auto"></div>
-
-<!-- ============ REVIEWS ============ -->
-<section class="relative py-28 px-6">
-  <div class="max-w-7xl mx-auto">
-    <div class="text-center mb-16 reveal">
-      <span class="mono text-xs tracking-[.3em]" style="color:var(--nasa-orange)">INCOMING TRANSMISSIONS</span>
-      <h2 class="hud-title text-3xl md:text-5xl font-black mt-3 text-white">MISSION REPORTS</h2>
+<!-- ============ OFFICIAL LINKS ============ -->
+<section class="section" id="links" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">SOL 0006 · CONNECT</div>
+      <h2>Official Channels</h2>
+      <p>Verified links only — straight to Andy Weir's own website, retailers, and social accounts.</p>
     </div>
-
-    <div class="grid md:grid-cols-3 gap-8">
-      <div class="panel p-8 reveal">
-        <div class="mono text-[10px] tracking-widest mb-4" style="color:var(--circuit-green)">REPORT // USA TODAY</div>
-        <p class="text-slate-200 italic leading-relaxed mb-6">"An epic story of redemption, discovery and cool speculative sci-fi."</p>
-        <div class="mono text-xs text-slate-400">RE: Project Hail Mary</div>
-      </div>
-      <div class="panel p-8 reveal">
-        <div class="mono text-[10px] tracking-widest mb-4" style="color:var(--circuit-green)">REPORT // THE WASHINGTON POST</div>
-        <p class="text-slate-200 italic leading-relaxed mb-6">"If you loved The Martian, you'll go crazy for Weir's latest."</p>
-        <div class="mono text-xs text-slate-400">RE: Project Hail Mary</div>
-      </div>
-      <div class="panel p-8 reveal">
-        <div class="mono text-[10px] tracking-widest mb-4" style="color:var(--circuit-green)">REPORT // THE WALL STREET JOURNAL</div>
-        <p class="text-slate-200 italic leading-relaxed mb-6">Praised the novel's engineering know-how and survival suspense on the lunar frontier.</p>
-        <div class="mono text-xs text-slate-400">RE: Artemis</div>
-      </div>
+    <div class="links-grid reveal">
+      <a class="link-tile" href="https://andyweirauthor.com/" target="_blank" rel="noopener"><i class="fa-solid fa-globe"></i><span>Official Site</span></a>
+      <a class="link-tile" href="https://www.amazon.com/stores/author/B00G0WYW92" target="_blank" rel="noopener"><i class="fa-brands fa-amazon"></i><span>Amazon</span></a>
+      <a class="link-tile" href="https://www.goodreads.com/author/show/6540057.Andy_Weir" target="_blank" rel="noopener"><i class="fa-brands fa-goodreads"></i><span>Goodreads</span></a>
+      <a class="link-tile" href="https://www.facebook.com/pages/Andy-Weir/462962073803090" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i><span>Facebook</span></a>
+      <a class="link-tile" href="https://twitter.com/andyweirauthor" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i><span>X / Twitter</span></a>
     </div>
   </div>
 </section>
 
 <!-- ============ NEWSLETTER ============ -->
-<section id="newsletter" class="relative py-28 px-6">
-  <div class="max-w-3xl mx-auto text-center reveal">
-    <span class="mono text-xs tracking-[.3em]" style="color:var(--nasa-orange)">GROUND CONTROL UPLINK</span>
-    <h2 class="hud-title text-3xl md:text-5xl font-black mt-3 mb-6 text-white">MISSION CONTROL TRANSMISSION</h2>
-    <p class="text-slate-300 mb-10">Subscribe to receive transmissions on new releases, film updates, and dispatches from deep space.</p>
-
-    <form id="newsletterForm" class="panel p-3 flex flex-col sm:flex-row gap-3">
-      <div class="flex items-center gap-3 flex-1 px-4">
-        <i class="fa-solid fa-satellite-dish" style="color:var(--cyan)"></i>
-        <input required type="email" placeholder="your.callsign@comms.net" class="mono bg-transparent w-full py-4 text-white placeholder-slate-500 border-none focus:ring-0" style="outline:none;">
-      </div>
-      <button type="submit" class="btn-primary whitespace-nowrap">Transmit <i class="fa-solid fa-paper-plane ml-2"></i></button>
+<section class="section newsletter" id="newsletter">
+  <div class="wrap reveal">
+    <div class="eyebrow" style="justify-content:center;">SOL 0007 · MISSION UPDATES</div>
+    <h2>Stay Updated</h2>
+    <p>Receive updates about new releases, interviews, and future projects.</p>
+    <form class="news-form" id="newsForm">
+      <input type="email" required placeholder="you@example.com" aria-label="Email address">
+      <button type="submit" class="btn btn-primary">Sign Up</button>
     </form>
-    <div id="newsletterStatus" class="mono text-xs mt-4" style="color:var(--circuit-green); min-height:1.2em;"></div>
-  </div>
-</section>
-
-<div class="circuit-divider max-w-7xl mx-auto"></div>
-
-<!-- ============ SOCIAL ============ -->
-<section id="contact" class="relative py-28 px-6">
-  <div class="max-w-4xl mx-auto text-center reveal">
-    <span class="mono text-xs tracking-[.3em]" style="color:var(--nasa-orange)">COMMS ARRAY</span>
-    <h2 class="hud-title text-3xl md:text-5xl font-black mt-3 mb-14 text-white">MISSION CHANNELS</h2>
-
-    <div class="flex flex-wrap justify-center gap-6">
-      <a href="https://andyweirauthor.com/" target="_blank" rel="noopener" class="panel flex flex-col items-center gap-3 px-8 py-7 hover:-translate-y-1 transition-transform" style="width:150px;">
-        <i class="fa-solid fa-globe text-3xl" style="color:var(--cyan)"></i>
-        <span class="mono text-xs">Official Site</span>
-      </a>
-      <a href="https://x.com/andyweirauthor" target="_blank" rel="noopener" class="panel flex flex-col items-center gap-3 px-8 py-7 hover:-translate-y-1 transition-transform" style="width:150px;">
-        <i class="fa-brands fa-x-twitter text-3xl" style="color:var(--cyan)"></i>
-        <span class="mono text-xs">@andyweirauthor</span>
-      </a>
-      <a href="https://www.facebook.com/AndyWeirAuthor/" target="_blank" rel="noopener" class="panel flex flex-col items-center gap-3 px-8 py-7 hover:-translate-y-1 transition-transform" style="width:150px;">
-        <i class="fa-brands fa-facebook text-3xl" style="color:var(--cyan)"></i>
-        <span class="mono text-xs">Facebook</span>
-      </a>
-      <a href="https://www.goodreads.com/author/show/6540057.Andy_Weir" target="_blank" rel="noopener" class="panel flex flex-col items-center gap-3 px-8 py-7 hover:-translate-y-1 transition-transform" style="width:150px;">
-        <i class="fa-brands fa-goodreads text-3xl" style="color:var(--cyan)"></i>
-        <span class="mono text-xs">Goodreads</span>
-      </a>
-      <a href="https://old.reddit.com/r/IAmA/comments/nkva3o/i_am_andy_weir_author_of_the_martian_and_my_new/" target="_blank" rel="noopener" class="panel flex flex-col items-center gap-3 px-8 py-7 hover:-translate-y-1 transition-transform" style="width:150px;">
-        <i class="fa-brands fa-reddit text-3xl" style="color:var(--cyan)"></i>
-        <span class="mono text-xs">Reddit AMA</span>
-      </a>
-    </div>
-
-    <div class="panel mt-16 p-8 text-left">
-      <h3 class="rajdhani text-xl font-bold text-white mb-4"><i class="fa-solid fa-film mr-2" style="color:var(--nasa-orange)"></i>Current Transmissions</h3>
-      <ul class="text-sm text-slate-300 space-y-3 leading-relaxed">
-        <li><span style="color:var(--circuit-green)">▸</span> <em>Project Hail Mary</em> (2026) — directed by Phil Lord &amp; Christopher Miller, starring Ryan Gosling and Sandra Hüller; released in theaters March 20, 2026, and now streaming on Prime Video and MGM+.</li>
-        <li><span style="color:var(--circuit-green)">▸</span> <em>The Martian</em> (2015) — directed by Ridley Scott, starring Matt Damon, remains in wide circulation across streaming platforms.</li>
-        <li><span style="color:var(--circuit-green)">▸</span> An <em>Artemis</em> film adaptation remains in development, with Phil Lord and Christopher Miller still attached.</li>
-      </ul>
-    </div>
+    <div class="news-note">No spam. Unsubscribe anytime.</div>
+    <div class="news-success" id="newsSuccess"><i class="fa-solid fa-circle-check"></i>&nbsp; You're on the list — welcome aboard.</div>
   </div>
 </section>
 
 <!-- ============ FOOTER ============ -->
-<footer class="relative py-14 px-6 border-t" style="border-color:var(--panel-line);">
-  <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-    <div class="logo-mark text-lg text-white">ANDY<span>WEIR</span></div>
-    <div class="mono text-xs text-slate-500 text-center">
-      © <span id="year"></span> Andy Weir — All Rights Reserved
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#top" class="nav-logo">ANDY WEIR<small>HARD SCIENCE FICTION</small></a>
+        <p>#1 New York Times bestselling author of The Martian, Artemis, and Project Hail Mary.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <span>Navigate</span>
+          <a href="#about">Author</a>
+          <a href="#books">Books</a>
+          <a href="#adaptations">Adaptations</a>
+          <a href="#newsletter">Newsletter</a>
+        </div>
+        <div class="footer-col">
+          <span>Shop</span>
+          <a href="https://www.amazon.com/stores/author/B00G0WYW92" target="_blank" rel="noopener">Amazon Author Page</a>
+          <a href="https://andyweirauthor.com/" target="_blank" rel="noopener">Official Website</a>
+          <a href="https://www.goodreads.com/author/show/6540057.Andy_Weir" target="_blank" rel="noopener">Goodreads</a>
+        </div>
+      </div>
     </div>
-    <div class="flex gap-6 mono text-xs">
-      <span class="badge"><span class="dot"></span>ALL SYSTEMS NOMINAL</span>
-      <span class="badge" style="border-color:var(--cyan);color:var(--cyan)">PHYSICS COMPLIANT</span>
+    <div class="footer-bottom">
+      <span>© 2026 Andy Weir. All rights reserved. · Designed by Azeezdcreatoragency</span>
+      <div class="footer-social">
+        <a href="https://www.facebook.com/pages/Andy-Weir/462962073803090" target="_blank" rel="noopener"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="https://twitter.com/andyweirauthor" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i></a>
+        <a href="https://www.goodreads.com/author/show/6540057.Andy_Weir" target="_blank" rel="noopener"><i class="fa-brands fa-goodreads"></i></a>
+      </div>
+      <a href="#top" class="back-top">↑ Back to top</a>
     </div>
   </div>
 </footer>
 
 <script>
-// ===== Starfield generation =====
-(function(){
-  const field = document.getElementById('starfield');
-  const count = window.innerWidth < 640 ? 90 : 180;
-  for(let i=0;i<count;i++){
-    const s = document.createElement('div');
-    s.className='star';
-    const size = Math.random()*2 + 0.5;
-    s.style.width = size+'px';
-    s.style.height = size+'px';
-    s.style.left = Math.random()*100+'%';
-    s.style.top = Math.random()*100+'%';
-    s.style.animationDuration = (Math.random()*3+2)+'s';
-    s.style.animationDelay = (Math.random()*4)+'s';
-    field.appendChild(s);
+  // Nav background on scroll
+  const mainNav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    mainNav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => io.observe(el));
+
+  // Learn more toggles
+  document.querySelectorAll('[data-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const more = btn.closest('.book-body').querySelector('[data-more]');
+      const open = more.classList.toggle('open');
+      btn.classList.toggle('open', open);
+      btn.querySelector('span').textContent = open ? 'Show Less' : 'Learn More';
+    });
+  });
+
+  // Newsletter fake-submit (no backend — front-end only confirmation)
+  const newsForm = document.getElementById('newsForm');
+  newsForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    document.getElementById('newsSuccess').classList.add('show');
+    newsForm.reset();
+  });
+
+  // Trajectory rail: build markers from sections
+  const sections = [
+    { id: 'top', label: 'Hero' },
+    { id: 'about', label: 'Author' },
+    { id: 'books', label: 'Books' },
+    { id: 'amazon', label: 'Amazon' },
+    { id: 'adaptations', label: 'Screen' },
+    { id: 'links', label: 'Connect' },
+    { id: 'newsletter', label: 'Updates' },
+  ];
+  const railMarks = document.getElementById('railMarks');
+  const railProgress = document.getElementById('railProgress');
+  const markEls = [];
+
+  function layoutMarks(){
+    const total = document.body.scrollHeight - window.innerHeight;
+    sections.forEach((s, i) => {
+      const el = document.getElementById(s.id);
+      if (!el) return;
+      const top = el.offsetTop;
+      const pct = Math.min(100, Math.max(0, (top / total) * 100));
+      if (!markEls[i]) {
+        const m = document.createElement('div');
+        m.className = 'rail-mark';
+        m.innerHTML = `<span>${s.label}</span>`;
+        m.addEventListener('click', () => el.scrollIntoView({behavior:'smooth'}));
+        railMarks.appendChild(m);
+        markEls[i] = m;
+      }
+      markEls[i].style.top = pct + '%';
+      markEls[i].dataset.sectionId = s.id;
+    });
   }
-})();
 
-// ===== Nav scroll state =====
-const nav = document.getElementById('mainnav');
-window.addEventListener('scroll', ()=>{
-  if(window.scrollY > 40){ nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); }
-});
+  function updateRail(){
+    const total = document.body.scrollHeight - window.innerHeight;
+    const pct = total > 0 ? (window.scrollY / total) * 100 : 0;
+    railProgress.style.height = pct + '%';
 
-// ===== Mobile menu =====
-const menuBtn = document.getElementById('menuBtn');
-const closeMenu = document.getElementById('closeMenu');
-const mobileMenu = document.getElementById('mobileMenu');
-menuBtn.addEventListener('click', ()=> mobileMenu.classList.add('open'));
-closeMenu.addEventListener('click', ()=> mobileMenu.classList.remove('open'));
-document.querySelectorAll('.mobile-link').forEach(l=> l.addEventListener('click', ()=> mobileMenu.classList.remove('open')));
-
-// ===== Hero slideshow =====
-const slides = document.querySelectorAll('.hero-slide');
-let slideIdx = 0;
-setInterval(()=>{
-  slides[slideIdx].classList.remove('active');
-  slideIdx = (slideIdx+1) % slides.length;
-  slides[slideIdx].classList.add('active');
-}, 5000);
-
-// ===== Hero parallax =====
-window.addEventListener('scroll', ()=>{
-  const y = window.scrollY;
-  document.getElementById('heroSlides').style.transform = `translateY(${y*0.25}px)`;
-});
-
-// ===== Scroll reveal =====
-const revealEls = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
-  });
-},{threshold:0.15});
-revealEls.forEach(el=> io.observe(el));
-
-// ===== Accordion =====
-document.querySelectorAll('.accordion-btn').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const panel = btn.nextElementSibling;
-    const expanded = btn.getAttribute('aria-expanded') === 'true';
-    document.querySelectorAll('.accordion-panel').forEach(p=> p.style.maxHeight = null);
-    document.querySelectorAll('.accordion-btn').forEach(b=> b.setAttribute('aria-expanded','false'));
-    if(!expanded){
-      btn.setAttribute('aria-expanded','true');
-      panel.style.maxHeight = panel.scrollHeight + 'px';
+    let currentId = sections[0].id;
+    for (const s of sections) {
+      const el = document.getElementById(s.id);
+      if (el && el.getBoundingClientRect().top < window.innerHeight * 0.5) currentId = s.id;
     }
-  });
-});
+    markEls.forEach(m => m && m.classList.toggle('active', m.dataset.sectionId === currentId));
+  }
 
-// ===== Newsletter (client-side only, no backend) =====
-document.getElementById('newsletterForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  const status = document.getElementById('newsletterStatus');
-  status.textContent = 'TRANSMITTING...';
-  setTimeout(()=>{
-    status.textContent = '> SIGNAL RECEIVED. UPLINK CONFIRMED. WELCOME ABOARD.';
-    this.reset();
-  }, 1200);
-});
-
-// ===== Footer year =====
-document.getElementById('year').textContent = new Date().getFullYear();
-
-// ===== Smooth scroll for internal anchors (progressive enhancement) =====
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click', function(e){
-    const target = document.querySelector(this.getAttribute('href'));
-    if(target){
-      e.preventDefault();
-      target.scrollIntoView({behavior:'smooth'});
-    }
-  });
-});
+  layoutMarks();
+  updateRail();
+  window.addEventListener('scroll', updateRail);
+  window.addEventListener('resize', () => { layoutMarks(); updateRail(); });
 </script>
 </body>
 </html>
